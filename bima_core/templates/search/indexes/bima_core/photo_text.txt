@@ -1,0 +1,34 @@
+{% load search_tags %}
+{% translatable object 'title' %}
+{% translatable object 'title' True %}
+{% translatable object 'description' %}
+{% translatable object 'description' True %}
+{{ object.internal_comment|compose_normalization }}
+{{ object.original_file_name|compose_normalization }}
+{{ object.original_platform|compose_normalization }}
+{{ object.province|compose_normalization }}
+{{ object.municipality|compose_normalization }}
+{{ object.district|compose_normalization }}
+{{ object.neighborhood|compose_normalization }}
+{{ object.address|compose_normalization }}
+{{ object.postcode }}
+{{ object.camera_model }}
+{{ object.author.first_name }} {{ object.author.last_name }}
+{{ object.author.first_name|normalize }} {{ object.author.last_name|normalize }}
+{{ object.flickr_id }}
+{{ object.flickr_username|compose_normalization }}
+{{ object.album.title|compose_normalization }}
+{{ object.copyright.name|compose_normalization }}
+{% translatable object 'internal_usage_restriction.title' %}
+{% translatable object 'internal_usage_restriction.title' True %}
+{% translatable object 'external_usage_restriction.title' %}
+{% translatable object 'external_usage_restriction.title' True %}
+{% for keyword in object.keywords.all %}
+{{ keyword.tag.name }}
+{% endfor %}
+{% for name in object.names.all %}
+{{ name.tag.name }}
+{% endfor %}
+{% for category in object.categories.all %}
+{{ category.name|compose_normalization }}
+{% endfor %}

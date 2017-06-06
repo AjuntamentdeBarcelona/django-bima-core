@@ -1,0 +1,355 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-06-02 12:53+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin.py:38
+#, python-brace-format
+msgid "{verbose_name_plural} has not soft delete available."
+msgstr ""
+
+#: admin.py:54
+#, python-brace-format
+msgid "Successfully soft deleted {count} {items}."
+msgstr ""
+
+#: admin.py:61
+#, python-format
+msgid "Permanently delete selected %(verbose_name_plural)s"
+msgstr ""
+
+#: admin.py:62
+#, python-format
+msgid "Soft delete selected %(verbose_name_plural)s"
+msgstr ""
+
+#: models.py:64 models.py:197 models.py:394
+msgid "Creation date"
+msgstr ""
+
+#: models.py:65 models.py:198 models.py:395
+msgid "Modification date"
+msgstr ""
+
+#: models.py:108 models.py:191 models.py:337
+msgid "Title"
+msgstr ""
+
+#: models.py:139 models.py:199 models.py:396
+msgid "Delete date"
+msgstr ""
+
+#: models.py:175 models.py:237
+msgid "Name"
+msgstr ""
+
+#: models.py:181
+msgid "Photo Type"
+msgstr ""
+
+#: models.py:182
+msgid "Photo Types"
+msgstr ""
+
+#: models.py:192 models.py:253 models.py:339 models.py:588
+msgid "Description"
+msgstr ""
+
+#: models.py:194 models.py:591
+msgid "Cover"
+msgstr ""
+
+#: models.py:226 models.py:390
+msgid "Album"
+msgstr ""
+
+#: models.py:227
+msgid "Albums"
+msgstr ""
+
+#: models.py:243 models.py:371
+msgid "Copyright"
+msgstr ""
+
+#: models.py:244
+msgid "Copyrights"
+msgstr ""
+
+#: models.py:259
+msgid "Usage right"
+msgstr ""
+
+#: models.py:260
+msgid "Usage rights"
+msgstr ""
+
+#: models.py:270
+msgid "First name"
+msgstr ""
+
+#: models.py:271
+msgid "last name"
+msgstr ""
+
+#: models.py:283 models.py:369
+msgid "Author"
+msgstr ""
+
+#: models.py:284
+msgid "Authors"
+msgstr ""
+
+#: models.py:293 models.py:355
+msgid "Width"
+msgstr ""
+
+#: models.py:294 models.py:356
+msgid "Height"
+msgstr ""
+
+#: models.py:295
+msgid "Original date"
+msgstr ""
+
+#: models.py:296 models.py:359
+msgid "Camera model"
+msgstr ""
+
+#: models.py:297 models.py:360
+msgid "Orientation"
+msgstr ""
+
+#: models.py:298 models.py:361
+msgid "Exif longitude"
+msgstr ""
+
+#: models.py:299 models.py:362
+msgid "Exif latitude"
+msgstr ""
+
+#: models.py:300 models.py:363
+msgid "Exif altitude"
+msgstr ""
+
+#: models.py:301
+msgid "Exif size (bytes)"
+msgstr ""
+
+#: models.py:323 models.py:582
+msgid "Private"
+msgstr ""
+
+#: models.py:324 models.py:583
+msgid "Published"
+msgstr ""
+
+#: models.py:335
+msgid "Identifier"
+msgstr ""
+
+#: models.py:336
+msgid "Image"
+msgstr ""
+
+#: models.py:338 models.py:589
+msgid "Status"
+msgstr ""
+
+#: models.py:340
+msgid "Original file name"
+msgstr ""
+
+#: models.py:341
+msgid "Internal comment"
+msgstr ""
+
+#: models.py:343
+msgid "Categorize date"
+msgstr ""
+
+#: models.py:347
+msgid "Province"
+msgstr ""
+
+#: models.py:348
+msgid "Municipality"
+msgstr ""
+
+#: models.py:349
+msgid "District"
+msgstr ""
+
+#: models.py:350
+msgid "Neighborhood"
+msgstr ""
+
+#: models.py:351
+msgid "Address"
+msgstr ""
+
+#: models.py:352
+msgid "Postcode"
+msgstr ""
+
+#: models.py:357
+msgid "Size (bytes)"
+msgstr ""
+
+#: models.py:358
+msgid "Exif date"
+msgstr ""
+
+#: models.py:366
+msgid "EXIF"
+msgstr ""
+
+#: models.py:374
+msgid "Internal usage restriction"
+msgstr ""
+
+#: models.py:377
+msgid "External usage restriction"
+msgstr ""
+
+#: models.py:381
+msgid "Flickr id"
+msgstr ""
+
+#: models.py:382
+msgid "Flickr username"
+msgstr ""
+
+#: models.py:383
+msgid "Owner"
+msgstr ""
+
+#: models.py:385
+msgid "Type"
+msgstr ""
+
+#: models.py:387
+msgid "Keywords"
+msgstr ""
+
+#: models.py:389
+msgid "Names"
+msgstr ""
+
+#: models.py:552 models.py:658
+msgid "Photo"
+msgstr ""
+
+#: models.py:553
+msgid "Photos"
+msgstr ""
+
+#: models.py:566
+msgid "Photo chunk"
+msgstr ""
+
+#: models.py:567
+msgid "Photo chunks"
+msgstr ""
+
+#: models.py:609
+msgid "Gallery"
+msgstr ""
+
+#: models.py:610
+msgid "Galleries"
+msgstr ""
+
+#: models.py:622 models.py:662
+msgid "Addition date"
+msgstr ""
+
+#: models.py:639
+msgid "Taxonomy"
+msgstr ""
+
+#: models.py:640
+msgid "Taxonomies"
+msgstr ""
+
+#: models.py:654
+msgid "Viewed"
+msgstr ""
+
+#: models.py:655
+msgid "Downloaded"
+msgstr ""
+
+#: models.py:659
+msgid "User"
+msgstr ""
+
+#: models.py:660
+msgid "Action"
+msgstr ""
+
+#: models.py:665
+msgid "Access log"
+msgstr ""
+
+#: models.py:666
+msgid "Access logs"
+msgstr ""
+
+#: templates/emails/singup/signup_reset_password_body.html:5
+#: templates/emails/singup/signup_reset_password_body.txt:5
+msgid "Hello from"
+msgstr ""
+
+#: templates/emails/singup/signup_reset_password_body.html:8
+#: templates/emails/singup/signup_reset_password_body.txt:7
+#, python-format
+msgid ""
+"\n"
+"    You're receiving this e-mail because user %(user_display)s at "
+"%(site_domain)s has given yours as an e-mail\n"
+"    address to connect their account.\n"
+"    "
+msgstr ""
+
+#: templates/emails/singup/signup_reset_password_body.html:15
+#: templates/emails/singup/signup_reset_password_body.txt:13
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: templates/emails/singup/signup_reset_password_body.html:20
+#: templates/emails/singup/signup_reset_password_body.txt:17
+msgid "Your username, in case you've forgotten:"
+msgstr ""
+
+#: templates/emails/singup/signup_reset_password_body.html:24
+#: templates/emails/singup/signup_reset_password_body.txt:20
+msgid "Thanks for using our site!"
+msgstr ""
+
+#: templates/emails/singup/signup_reset_password_body.html:25
+#: templates/emails/singup/signup_reset_password_body.txt:21
+#, python-format
+msgid "The %(site_name)s team"
+msgstr ""
+
+#: templates/emails/singup/signup_reset_password_subject.html:3
+msgid "Thank you for signing up in"
+msgstr ""
+
+#: templates/emails/singup/signup_reset_password_subject.html:5
+msgid "Password reset on"
+msgstr ""
