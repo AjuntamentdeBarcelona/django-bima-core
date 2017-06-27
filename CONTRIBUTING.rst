@@ -2,7 +2,7 @@
 Contributing
 ============
 
-You are welcome to contribute to the development of django-tables2 in various ways:
+You are welcome to contribute to the development of Django BIMA Core in various ways:
 
 * Discover and report bugs. Make sure to include a minimal example to show your problem.
 * Propose features, add tests or fix bugs by opening a Pull Request.
