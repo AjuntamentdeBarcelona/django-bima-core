@@ -256,7 +256,8 @@ class GalleryAdmin(TabbedTranslationAdmin):
 @admin.register(DAMTaxonomy)
 class DAMTaxonomyAdmin(TabbedTranslationAdmin, CategoryBaseAdmin):
     form = CategoryBaseAdminForm
-    list_display = ('slug', 'name', 'active')
+    list_display = ('slug', 'name', 'active', 'code')
+    raw_id_fields = ('parent',)
 
     class Media:
         js = (JAVASCRIPT_URL + 'genericcollections.js',)

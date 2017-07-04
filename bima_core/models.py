@@ -626,9 +626,10 @@ class GalleryMembership(GalleryMembershipPermissionMixin, models.Model):
 class DAMTaxonomy(TaxonomyPermissionMixin, CategoryBase):
     """
     Model to categorize photos.
-    It is modeled as a hierarchical structure with unique slug.
+    It is a hierarchical structure with unique slug and optional code.
     """
-
+    code = models.CharField(_('code'), max_length=50, blank=True)
+    slug = models.SlugField(verbose_name=_('slug'), max_length=200)
     parents = TaxonomyManager()
 
     @property
