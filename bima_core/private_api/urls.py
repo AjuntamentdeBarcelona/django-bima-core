@@ -7,7 +7,7 @@ from .routers import CreateDeleteRouter
 from .views import schema_view, ObtainAuthToken, GroupViewSet, UserViewSet, AlbumViewSet, PhotoViewSet, WhoAmI, \
     TaxonomyViewSet, GalleryViewSet, LinkerPhotoViewSet, LoggerViewSet, ImportPhotoFlickr, TaxonomyListViewSet, \
     UploadChunkedPhoto, LoggerListView, CopyrightViewSet, AuthorViewSet, RestrictionViewSet, PhotoSearchView, \
-    KeywordViewSet, NameViewSet, UpdatePhoto, PhotoTypeViewSet
+    KeywordViewSet, NameViewSet, UpdatePhoto, PhotoTypeViewSet, TaxonomyLevelViewSet
 
 urlpatterns = [
     url(r'^docs/$', schema_view),
@@ -44,6 +44,7 @@ simple_router.register('users', UserViewSet)
 simple_router.register('albums', AlbumViewSet)
 simple_router.register('photos', PhotoViewSet)
 simple_router.register('categories', TaxonomyViewSet)
+simple_router.register('categories-level', TaxonomyLevelViewSet)
 simple_router.register('galleries', GalleryViewSet)
 
 # Create & List view set

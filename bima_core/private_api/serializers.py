@@ -759,6 +759,14 @@ class TaxonomySerializer(TranslationSerializerMixin, BaseTaxonomySerializer):
         return value
 
 
+class TaxonomyLevelSerializer(TaxonomySerializer):
+    """
+    Like TaxonomySerializer but without recursive children.
+    """
+    class Meta(BaseTaxonomySerializer.Meta):
+        fields = ('id', 'name', 'slug', 'parent', 'ancestors', 'extra_info', 'permissions', )
+
+
 class AccessLogSerializer(serializers.ModelSerializer):
     """
     AccessLog serializer.

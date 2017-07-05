@@ -28,7 +28,7 @@ from .serializers import GroupSerializer, UserSerializer, AlbumSerializer, Photo
     TaxonomyListSerializer, GallerySerializer, GalleryMembershipSerializer, AccessLogSerializer, \
     PhotoFlickrSerializer, PhotoChunkedSerializer, WhoAmISerializer, CopyrightSerializer, UsageRightSerializer, \
     PhotoAuthorSerializer, PhotoSearchSerializer, KeywordTagSerializer, NameTagSerializer, PhotoUpdateSerializer, \
-    BasePhotoSerializer, AuthTokenSerializer, PhotoTypeSerializer
+    BasePhotoSerializer, AuthTokenSerializer, PhotoTypeSerializer, TaxonomyLevelSerializer
 
 schema_view = get_swagger_view(title=_i('BIMA Core: Private API'))
 
@@ -312,6 +312,16 @@ class TaxonomyViewSet(FilterModelViewSet):
     Update a category instance.
     """
     serializer_class = TaxonomySerializer
+    queryset = DAMTaxonomy.objects.active()
+    filter_class = TaxonomyFilter
+    pagination_class = TaxonomyNumberPagination
+
+
+class TaxonomyLevelViewSet(FilterReadOnlyModelViewSet):
+    """
+    Like TaxonomyViewSet but only for one level, not the entire tree.
+    """
+    serializer_class = TaxonomyLevelSerializer
     queryset = DAMTaxonomy.objects.active()
     filter_class = TaxonomyFilter
     pagination_class = TaxonomyNumberPagination
