@@ -22,7 +22,7 @@ from .backends import HaystackDjangoFilterBackend
 from .filters import PhotoFilter, UserFilter, AlbumFilter, TaxonomyFilter, GalleryFilter, GroupFilter, \
     AccessLogFilter, CopyrightFilter, UsageRightFilter, PhotoAuthorFilter, PhotoSearchFilter, KeywordFilter, \
     NameFilter, PhotoTypeFilter
-from .paginators import LargeNumberPagination, TaxonomyNumberPagination
+from .paginators import LargeNumberPagination, MaxPagination, TaxonomyNumberPagination
 from .permissions import FilterAlbumPermissionBackend, FilterPhotoPermissionBackend
 from .serializers import GroupSerializer, UserSerializer, AlbumSerializer, PhotoSerializer, TaxonomySerializer, \
     TaxonomyListSerializer, GallerySerializer, GalleryMembershipSerializer, AccessLogSerializer, \
@@ -319,12 +319,12 @@ class TaxonomyViewSet(FilterModelViewSet):
 
 class TaxonomyLevelViewSet(FilterReadOnlyModelViewSet):
     """
-    Like TaxonomyViewSet but only for one level, not the entire tree.
+    Like TaxonomyViewSet but with almost infinite pagination and only for one level, not the entire tree.
     """
     serializer_class = TaxonomyLevelSerializer
     queryset = DAMTaxonomy.objects.active()
     filter_class = TaxonomyFilter
-    pagination_class = TaxonomyNumberPagination
+    pagination_class = MaxPagination
 
 
 class TaxonomyListViewSet(FilterMixin, ListAPIView):
