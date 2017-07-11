@@ -44,7 +44,7 @@ simple_router.register('users', UserViewSet)
 simple_router.register('albums', AlbumViewSet)
 simple_router.register('photos', PhotoViewSet)
 simple_router.register('categories', TaxonomyViewSet)
-simple_router.register('categories-level', TaxonomyLevelViewSet)
+simple_router.register('categories-level', TaxonomyLevelViewSet, 'damtaxonomylevel')
 simple_router.register('galleries', GalleryViewSet)
 
 # Create & List view set
