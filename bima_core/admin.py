@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from categories.base import CategoryBaseAdmin, CategoryBaseAdminForm
-from categories.settings import JAVASCRIPT_URL
 from django.contrib import admin, messages
 from django.contrib.admin.actions import delete_selected
 from django.contrib.admin.utils import model_ngettext, NestedObjects
@@ -10,6 +8,7 @@ from django.contrib.auth.models import Group as AuthGroup
 from django.contrib.contenttypes.admin import GenericTabularInline
 from django.db import router
 from django.utils.translation import ugettext_lazy as _
+from django_mptt_admin.admin import DjangoMpttAdmin
 from modeltranslation.admin import TabbedTranslationAdmin
 
 from .constants import DEFAULT_GROUPS
@@ -254,13 +253,13 @@ class GalleryAdmin(TabbedTranslationAdmin):
 
 
 @admin.register(DAMTaxonomy)
-class DAMTaxonomyAdmin(TabbedTranslationAdmin, CategoryBaseAdmin):
-    form = CategoryBaseAdminForm
+class DAMTaxonomyAdmin(TabbedTranslationAdmin, DjangoMpttAdmin):
     list_display = ('slug', 'name', 'active', 'code')
+    list_filter = ('active',)
     raw_id_fields = ('parent',)
-
-    class Media:
-        js = (JAVASCRIPT_URL + 'genericcollections.js',)
+    tree_auto_open = 0
+    tree_load_on_demand = 0
+    item_label_field_name = 'title_for_admin'
 
 
 @admin.register(AccessLog)

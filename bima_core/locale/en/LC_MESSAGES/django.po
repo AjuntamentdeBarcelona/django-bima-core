@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-02 12:53+0200\n"
+"POT-Creation-Date: 2017-07-11 11:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,22 +17,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin.py:38
+#: admin.py:37
 #, python-brace-format
 msgid "{verbose_name_plural} has not soft delete available."
 msgstr ""
 
-#: admin.py:54
+#: admin.py:53
 #, python-brace-format
 msgid "Successfully soft deleted {count} {items}."
 msgstr ""
 
-#: admin.py:61
+#: admin.py:60
 #, python-format
 msgid "Permanently delete selected %(verbose_name_plural)s"
 msgstr ""
 
-#: admin.py:62
+#: admin.py:61
 #, python-format
 msgid "Soft delete selected %(verbose_name_plural)s"
 msgstr ""
@@ -249,7 +249,7 @@ msgstr ""
 msgid "Names"
 msgstr ""
 
-#: models.py:552 models.py:658
+#: models.py:552 models.py:664
 msgid "Photo"
 msgstr ""
 
@@ -273,39 +273,55 @@ msgstr ""
 msgid "Galleries"
 msgstr ""
 
-#: models.py:622 models.py:662
+#: models.py:622 models.py:668
 msgid "Addition date"
 msgstr ""
 
-#: models.py:639
+#: models.py:631
+msgid "code"
+msgstr ""
+
+#: models.py:632
+msgid "slug"
+msgstr ""
+
+#: models.py:641
+msgid "active"
+msgstr ""
+
+#: models.py:641
+msgid "inactive"
+msgstr ""
+
+#: models.py:645
 msgid "Taxonomy"
 msgstr ""
 
-#: models.py:640
+#: models.py:646
 msgid "Taxonomies"
 msgstr ""
 
-#: models.py:654
+#: models.py:660
 msgid "Viewed"
 msgstr ""
 
-#: models.py:655
+#: models.py:661
 msgid "Downloaded"
 msgstr ""
 
-#: models.py:659
+#: models.py:665
 msgid "User"
 msgstr ""
 
-#: models.py:660
+#: models.py:666
 msgid "Action"
 msgstr ""
 
-#: models.py:665
+#: models.py:671
 msgid "Access log"
 msgstr ""
 
-#: models.py:666
+#: models.py:672
 msgid "Access logs"
 msgstr ""
 

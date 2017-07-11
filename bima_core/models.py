@@ -636,6 +636,11 @@ class DAMTaxonomy(TaxonomyPermissionMixin, CategoryBase):
     def ancestors(self):
         return self.get_ancestors(ascending=True, include_self=False)
 
+    @property
+    def title_for_admin(self):
+        active = _('active') if self.active else _('inactive')
+        return '{} ({})'.format(self.name, active)
+
     class Meta:
         verbose_name = _('Taxonomy')
         verbose_name_plural = _('Taxonomies')
