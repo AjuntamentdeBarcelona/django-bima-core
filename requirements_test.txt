@@ -8,6 +8,7 @@ django-geoposition>=0.3
 django-haystack>=2.5.1,<2.7
 django-import-export>=0.5.1,<1
 django-modeltranslation>=0.12,<0.13
+django-mptt-admin==0.4.6
 django-rest-auth>=0.8.1,<1
 django-rest-swagger>=2.1.0,<2.2
 django-rq>=0.9.4,<1

@@ -22,13 +22,13 @@ from .backends import HaystackDjangoFilterBackend
 from .filters import PhotoFilter, UserFilter, AlbumFilter, TaxonomyFilter, GalleryFilter, GroupFilter, \
     AccessLogFilter, CopyrightFilter, UsageRightFilter, PhotoAuthorFilter, PhotoSearchFilter, KeywordFilter, \
     NameFilter, PhotoTypeFilter
-from .paginators import LargeNumberPagination, TaxonomyNumberPagination
+from .paginators import LargeNumberPagination, MaxPagination, TaxonomyNumberPagination
 from .permissions import FilterAlbumPermissionBackend, FilterPhotoPermissionBackend
 from .serializers import GroupSerializer, UserSerializer, AlbumSerializer, PhotoSerializer, TaxonomySerializer, \
     TaxonomyListSerializer, GallerySerializer, GalleryMembershipSerializer, AccessLogSerializer, \
     PhotoFlickrSerializer, PhotoChunkedSerializer, WhoAmISerializer, CopyrightSerializer, UsageRightSerializer, \
     PhotoAuthorSerializer, PhotoSearchSerializer, KeywordTagSerializer, NameTagSerializer, PhotoUpdateSerializer, \
-    BasePhotoSerializer, AuthTokenSerializer, PhotoTypeSerializer
+    BasePhotoSerializer, AuthTokenSerializer, PhotoTypeSerializer, TaxonomyLevelSerializer
 
 schema_view = get_swagger_view(title=_i('BIMA Core: Private API'))
 
@@ -315,6 +315,16 @@ class TaxonomyViewSet(FilterModelViewSet):
     queryset = DAMTaxonomy.objects.active()
     filter_class = TaxonomyFilter
     pagination_class = TaxonomyNumberPagination
+
+
+class TaxonomyLevelViewSet(FilterReadOnlyModelViewSet):
+    """
+    Like TaxonomyViewSet but with almost infinite pagination and only for one level, not the entire tree.
+    """
+    serializer_class = TaxonomyLevelSerializer
+    queryset = DAMTaxonomy.objects.active()
+    filter_class = TaxonomyFilter
+    pagination_class = MaxPagination
 
 
 class TaxonomyListViewSet(FilterMixin, ListAPIView):

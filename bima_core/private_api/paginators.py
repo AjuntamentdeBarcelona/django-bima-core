@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import sys
 from collections import OrderedDict
 from constance import config
 from rest_framework.pagination import PageNumberPagination
@@ -40,6 +41,12 @@ class LargeNumberPagination(NumberPagination):
         if config.LARGE_PAGE_SIZE:
             return config.LARGE_PAGE_SIZE
         return page_size
+
+
+class MaxPagination(NumberPagination):
+
+    def get_page_size(self, request):
+        return sys.maxsize
 
 
 class TaxonomyNumberPagination(NumberPagination):

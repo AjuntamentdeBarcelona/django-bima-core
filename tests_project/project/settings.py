@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'bima_core',
     'bima_core.private_api',
 
+    'django_mptt_admin',
     'categories',
     'constance',
     'constance.backends.database',
