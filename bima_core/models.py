@@ -19,8 +19,8 @@ from .managers import TaxonomyManager, PhotoChunkedManager, KeywordManager, Albu
 from .permissions import UserPermissionMixin, AlbumPermissionMixin, PhotoPermissionMixin, \
     GalleryPermissionMixin, GalleryMembershipPermissionMixin, TaxonomyPermissionMixin, AccessLogPermissionMixin, \
     GroupPermissionMixin, PhotoChunkPermissionMixin, RightPermissionMixin, ReadPermissionMixin
-from .utils import idpath, get_exif_info, get_exif_datetime, get_exif_longitude, get_exif_latitude, get_exif_altitude, \
-    build_absolute_uri
+from .utils import idpath, get_exif_info, get_exif_datetime, get_exif_longitude, get_exif_latitude, \
+    get_exif_altitude, build_absolute_uri
 import logging
 import os
 import six
@@ -318,11 +318,19 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
 
     PRIVATE = 0
     PUBLISHED = 1
-
     STATUS_CHOICES = [
         (PRIVATE, _('Private')),
         (PUBLISHED, _('Published')),
     ]
+
+    UPLOAD_ERROR = 0
+    UPLOADING = 1
+    UPLOADED = 2
+    UPLOAD_CHOICES = (
+        (UPLOAD_ERROR, _('Upload error')),
+        (UPLOADING, _('Uploading')),
+        (UPLOADED, _('Uploaded')),
+    )
 
     def image_path(instance, filename):
         basename, ext = os.path.splitext(filename)
@@ -336,6 +344,7 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
     image = models.ImageField(upload_to=image_path, max_length=200, blank=True, null=True, verbose_name=_('Image'))
     title = models.CharField(max_length=128, verbose_name=_('Title'))
     status = models.IntegerField(choices=STATUS_CHOICES, default=PRIVATE, verbose_name=_('Status'))
+    upload_status = models.IntegerField(_('Upload status'), choices=UPLOAD_CHOICES, default=UPLOADING)
     description = models.TextField(blank=True, default='', verbose_name=_('Description'))
     original_file_name = models.CharField(max_length=200, verbose_name=_('Original file name'))
     internal_comment = models.TextField(blank=True, default='', verbose_name=_('Internal comment'))

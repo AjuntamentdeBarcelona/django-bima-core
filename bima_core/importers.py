@@ -73,10 +73,17 @@ class Flickr(object):
         # create photo and nested related models
         exif, created = PhotoExif.objects.update_or_create(photo__flickr_id=pk, defaults=photo_exif)
         defaults = {
-            'image': image, 'album': album, 'owner': user, 'exif': exif, 'title': self._get_title(photo),
-            'status': Photo.PRIVATE, 'flickr_username': self._get_username(photo),
+            'image': image,
+            'album': album,
+            'owner': user,
+            'exif': exif,
+            'title': self._get_title(photo),
+            'status': Photo.PRIVATE,
+            'upload_status': Photo.UPLOADED,
+            'flickr_username': self._get_username(photo),
             'description': self._get_title(photo),
-            'author': author, 'copyright': photo_copyright,
+            'author': author,
+            'copyright': photo_copyright,
             'categorize_date': now().date()
         }
         defaults.update(**photo_exif)

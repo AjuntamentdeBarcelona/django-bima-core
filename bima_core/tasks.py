@@ -23,20 +23,29 @@ def up_image_to_s3(photo_id, image_id):
         image = PhotoChunked.objects.get(id=image_id)
         photo.image = ContentFile(image.file.read(), name=image.filename)
         photo.set_metadata(only_readable=False, commit=False)
-
-        # auto save original filename as current image filename
         if not photo.original_file_name:
             photo.original_file_name = get_filename(image.file.name)
 
+        # upload new image
         photo.save()
+
+        # update upload status after upload has been really done
+        photo.upload_status = Photo.UPLOADED
+        photo.save()
+
         return photo
     except Photo.DoesNotExist:
-        logger.warning("Photo {} does not exits. Image will not save.".format(photo_id), exc_info=True)
+        logger.error("Photo {} does not exits. Image will not save.".format(photo_id), exc_info=True)
     except PhotoChunked.DoesNotExist:
-        logger.warning("Photo chunk {} does not exits. Image will not save.".format(image_id), exc_info=True)
+        logger.error("Photo chunk {} does not exits. Image will not save.".format(image_id), exc_info=True)
+        photo.upload_status = Photo.UPLOADED if photo.image else Photo.UPLOAD_ERROR
+        photo.save()
     except Exception:
         logger.error("An error occurred updating photo {} with image chunk {}".format(photo_id, image_id),
                      exc_info=True, extra={'photo_id': photo_id, 'image_id': image_id})
+        photo = Photo.objects.get(id=photo_id)
+        photo.upload_status = Photo.UPLOADED if photo.image else Photo.UPLOAD_ERROR
+        photo.save()
 
 
 @job(RQ_HAYSTACK_PHOTO_INDEX_QUEUE)
