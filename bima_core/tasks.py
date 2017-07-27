@@ -21,11 +21,6 @@ def up_image_to_s3(photo_id, image_id):
     try:
         photo = Photo.objects.get(id=photo_id)
         image = PhotoChunked.objects.get(id=image_id)
-
-        # with no image or with unmodified image, it won't be uploaded
-        photo.upload_status = Photo.UPLOADING
-        photo.save()
-
         photo.image = ContentFile(image.file.read(), name=image.filename)
         photo.set_metadata(only_readable=False, commit=False)
         if not photo.original_file_name:
@@ -43,12 +38,13 @@ def up_image_to_s3(photo_id, image_id):
         logger.error("Photo {} does not exits. Image will not save.".format(photo_id), exc_info=True)
     except PhotoChunked.DoesNotExist:
         logger.error("Photo chunk {} does not exits. Image will not save.".format(image_id), exc_info=True)
+        photo.upload_status = Photo.UPLOADED if photo.image else Photo.UPLOAD_ERROR
+        photo.save()
     except Exception:
         logger.error("An error occurred updating photo {} with image chunk {}".format(photo_id, image_id),
                      exc_info=True, extra={'photo_id': photo_id, 'image_id': image_id})
-        # restore upload status
         photo = Photo.objects.get(id=photo_id)
-        photo.upload_status = Photo.UPLOADED if photo.image else Photo.NOT_UPLOADED
+        photo.upload_status = Photo.UPLOADED if photo.image else Photo.UPLOAD_ERROR
         photo.save()
 
 

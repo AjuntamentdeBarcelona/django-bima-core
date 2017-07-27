@@ -323,11 +323,11 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
         (PUBLISHED, _('Published')),
     ]
 
-    NOT_UPLOADED = 0
+    UPLOAD_ERROR = 0
     UPLOADING = 1
     UPLOADED = 2
     UPLOAD_CHOICES = (
-        (NOT_UPLOADED, _('Not uploaded')),
+        (UPLOAD_ERROR, _('Upload error')),
         (UPLOADING, _('Uploading')),
         (UPLOADED, _('Uploaded')),
     )
@@ -344,7 +344,7 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
     image = models.ImageField(upload_to=image_path, max_length=200, blank=True, null=True, verbose_name=_('Image'))
     title = models.CharField(max_length=128, verbose_name=_('Title'))
     status = models.IntegerField(choices=STATUS_CHOICES, default=PRIVATE, verbose_name=_('Status'))
-    upload_status = models.IntegerField(_('Upload status'), choices=UPLOAD_CHOICES, default=NOT_UPLOADED)
+    upload_status = models.IntegerField(_('Upload status'), choices=UPLOAD_CHOICES, default=UPLOADING)
     description = models.TextField(blank=True, default='', verbose_name=_('Description'))
     original_file_name = models.CharField(max_length=200, verbose_name=_('Original file name'))
     internal_comment = models.TextField(blank=True, default='', verbose_name=_('Internal comment'))
