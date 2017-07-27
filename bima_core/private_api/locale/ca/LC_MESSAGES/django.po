@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-11 11:06+0200\n"
+"POT-Creation-Date: 2017-07-27 16:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,18 +44,18 @@ msgstr "pk \"{pk}\" no vàlida - la fotografia no existeix a la galeria actual"
 msgid "A Category can not be its own parent."
 msgstr "Una categoria no pot ser el seu propi pare"
 
-#: private_api/serializers.py:996
+#: private_api/serializers.py:997
 msgid "Album '{}' does not exist"
 msgstr "L'àlbum '{}' no existeix"
 
-#: private_api/serializers.py:1002
+#: private_api/serializers.py:1003
 msgid "Photo '{}' does not exist"
 msgstr "La fotografia '{}' no existeix"
 
-#: private_api/serializers.py:1008
+#: private_api/serializers.py:1009
 msgid "Author '{}' does not exist"
 msgstr "L'autor '{}' no existeix"
 
-#: private_api/serializers.py:1014
+#: private_api/serializers.py:1015
 msgid "Copyright '{}' does not exist"
 msgstr "El copyright '{}' no existeix"

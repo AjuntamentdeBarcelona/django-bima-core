@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-11 11:06+0200\n"
+"POT-Creation-Date: 2017-07-27 16:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,19 +38,19 @@ msgstr ""
 msgid "Soft delete selected %(verbose_name_plural)s"
 msgstr ""
 
-#: models.py:64 models.py:197 models.py:394
+#: models.py:64 models.py:197 models.py:403
 msgid "Creation date"
 msgstr ""
 
-#: models.py:65 models.py:198 models.py:395
+#: models.py:65 models.py:198 models.py:404
 msgid "Modification date"
 msgstr ""
 
-#: models.py:108 models.py:191 models.py:337
+#: models.py:108 models.py:191 models.py:345
 msgid "Title"
 msgstr ""
 
-#: models.py:139 models.py:199 models.py:396
+#: models.py:139 models.py:199 models.py:405
 msgid "Delete date"
 msgstr ""
 
@@ -66,15 +66,15 @@ msgstr ""
 msgid "Photo Types"
 msgstr ""
 
-#: models.py:192 models.py:253 models.py:339 models.py:588
+#: models.py:192 models.py:253 models.py:348 models.py:597
 msgid "Description"
 msgstr ""
 
-#: models.py:194 models.py:591
+#: models.py:194 models.py:600
 msgid "Cover"
 msgstr ""
 
-#: models.py:226 models.py:390
+#: models.py:226 models.py:399
 msgid "Album"
 msgstr ""
 
@@ -82,7 +82,7 @@ msgstr ""
 msgid "Albums"
 msgstr ""
 
-#: models.py:243 models.py:371
+#: models.py:243 models.py:380
 msgid "Copyright"
 msgstr ""
 
@@ -106,7 +106,7 @@ msgstr ""
 msgid "last name"
 msgstr ""
 
-#: models.py:283 models.py:369
+#: models.py:283 models.py:378
 msgid "Author"
 msgstr ""
 
@@ -114,11 +114,11 @@ msgstr ""
 msgid "Authors"
 msgstr ""
 
-#: models.py:293 models.py:355
+#: models.py:293 models.py:364
 msgid "Width"
 msgstr ""
 
-#: models.py:294 models.py:356
+#: models.py:294 models.py:365
 msgid "Height"
 msgstr ""
 
@@ -126,23 +126,23 @@ msgstr ""
 msgid "Original date"
 msgstr ""
 
-#: models.py:296 models.py:359
+#: models.py:296 models.py:368
 msgid "Camera model"
 msgstr ""
 
-#: models.py:297 models.py:360
+#: models.py:297 models.py:369
 msgid "Orientation"
 msgstr ""
 
-#: models.py:298 models.py:361
+#: models.py:298 models.py:370
 msgid "Exif longitude"
 msgstr ""
 
-#: models.py:299 models.py:362
+#: models.py:299 models.py:371
 msgid "Exif latitude"
 msgstr ""
 
-#: models.py:300 models.py:363
+#: models.py:300 models.py:372
 msgid "Exif altitude"
 msgstr ""
 
@@ -150,179 +150,195 @@ msgstr ""
 msgid "Exif size (bytes)"
 msgstr ""
 
-#: models.py:323 models.py:582
+#: models.py:322 models.py:591
 msgid "Private"
 msgstr ""
 
-#: models.py:324 models.py:583
+#: models.py:323 models.py:592
 msgid "Published"
 msgstr ""
 
-#: models.py:335
-msgid "Identifier"
+#: models.py:330
+msgid "Upload error"
 msgstr ""
 
-#: models.py:336
-msgid "Image"
+#: models.py:331
+msgid "Uploading"
 msgstr ""
 
-#: models.py:338 models.py:589
-msgid "Status"
-msgstr ""
-
-#: models.py:340
-msgid "Original file name"
-msgstr ""
-
-#: models.py:341
-msgid "Internal comment"
+#: models.py:332
+msgid "Uploaded"
 msgstr ""
 
 #: models.py:343
-msgid "Categorize date"
+msgid "Identifier"
+msgstr ""
+
+#: models.py:344
+msgid "Image"
+msgstr ""
+
+#: models.py:346 models.py:598
+msgid "Status"
 msgstr ""
 
 #: models.py:347
-msgid "Province"
-msgstr ""
-
-#: models.py:348
-msgid "Municipality"
+msgid "Upload status"
 msgstr ""
 
 #: models.py:349
-msgid "District"
+msgid "Original file name"
 msgstr ""
 
 #: models.py:350
-msgid "Neighborhood"
-msgstr ""
-
-#: models.py:351
-msgid "Address"
+msgid "Internal comment"
 msgstr ""
 
 #: models.py:352
-msgid "Postcode"
+msgid "Categorize date"
+msgstr ""
+
+#: models.py:356
+msgid "Province"
 msgstr ""
 
 #: models.py:357
-msgid "Size (bytes)"
+msgid "Municipality"
 msgstr ""
 
 #: models.py:358
-msgid "Exif date"
+msgid "District"
+msgstr ""
+
+#: models.py:359
+msgid "Neighborhood"
+msgstr ""
+
+#: models.py:360
+msgid "Address"
+msgstr ""
+
+#: models.py:361
+msgid "Postcode"
 msgstr ""
 
 #: models.py:366
+msgid "Size (bytes)"
+msgstr ""
+
+#: models.py:367
+msgid "Exif date"
+msgstr ""
+
+#: models.py:375
 msgid "EXIF"
 msgstr ""
 
-#: models.py:374
+#: models.py:383
 msgid "Internal usage restriction"
 msgstr ""
 
-#: models.py:377
+#: models.py:386
 msgid "External usage restriction"
 msgstr ""
 
-#: models.py:381
+#: models.py:390
 msgid "Flickr id"
 msgstr ""
 
-#: models.py:382
+#: models.py:391
 msgid "Flickr username"
 msgstr ""
 
-#: models.py:383
+#: models.py:392
 msgid "Owner"
 msgstr ""
 
-#: models.py:385
+#: models.py:394
 msgid "Type"
 msgstr ""
 
-#: models.py:387
+#: models.py:396
 msgid "Keywords"
 msgstr ""
 
-#: models.py:389
+#: models.py:398
 msgid "Names"
 msgstr ""
 
-#: models.py:552 models.py:664
+#: models.py:561 models.py:673
 msgid "Photo"
 msgstr ""
 
-#: models.py:553
+#: models.py:562
 msgid "Photos"
 msgstr ""
 
-#: models.py:566
+#: models.py:575
 msgid "Photo chunk"
 msgstr ""
 
-#: models.py:567
+#: models.py:576
 msgid "Photo chunks"
 msgstr ""
 
-#: models.py:609
+#: models.py:618
 msgid "Gallery"
 msgstr ""
 
-#: models.py:610
+#: models.py:619
 msgid "Galleries"
 msgstr ""
 
-#: models.py:622 models.py:668
+#: models.py:631 models.py:677
 msgid "Addition date"
 msgstr ""
 
-#: models.py:631
+#: models.py:640
 msgid "code"
 msgstr ""
 
-#: models.py:632
+#: models.py:641
 msgid "slug"
 msgstr ""
 
-#: models.py:641
+#: models.py:650
 msgid "active"
 msgstr ""
 
-#: models.py:641
+#: models.py:650
 msgid "inactive"
 msgstr ""
 
-#: models.py:645
+#: models.py:654
 msgid "Taxonomy"
 msgstr ""
 
-#: models.py:646
+#: models.py:655
 msgid "Taxonomies"
 msgstr ""
 
-#: models.py:660
+#: models.py:669
 msgid "Viewed"
 msgstr ""
 
-#: models.py:661
+#: models.py:670
 msgid "Downloaded"
 msgstr ""
 
-#: models.py:665
+#: models.py:674
 msgid "User"
 msgstr ""
 
-#: models.py:666
+#: models.py:675
 msgid "Action"
 msgstr ""
 
-#: models.py:671
+#: models.py:680
 msgid "Access log"
 msgstr ""
 
-#: models.py:672
+#: models.py:681
 msgid "Access logs"
 msgstr ""
 
