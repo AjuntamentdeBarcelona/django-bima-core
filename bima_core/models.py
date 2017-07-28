@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+import logging
+import os
+import six
+
 from categories.models import CategoryBase
 from constance import config
 from django.conf import settings
@@ -14,6 +18,7 @@ from geoposition.fields import GeopositionField
 from hashfs import HashFS
 from taggit.managers import TaggableManager
 from taggit.models import GenericTaggedItemBase, Tag
+
 from .fields import LanguageField
 from .managers import TaxonomyManager, PhotoChunkedManager, KeywordManager, AlbumManager, PhotoManager, UserManager
 from .permissions import UserPermissionMixin, AlbumPermissionMixin, PhotoPermissionMixin, \
@@ -21,9 +26,8 @@ from .permissions import UserPermissionMixin, AlbumPermissionMixin, PhotoPermiss
     GroupPermissionMixin, PhotoChunkPermissionMixin, RightPermissionMixin, ReadPermissionMixin
 from .utils import idpath, get_exif_info, get_exif_datetime, get_exif_longitude, get_exif_latitude, \
     get_exif_altitude, build_absolute_uri
-import logging
-import os
-import six
+from .filetypes import FileType
+
 
 logger = logging.getLogger(__name__)
 
@@ -398,6 +402,10 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
     names = TaggableManager(blank=True, through=TaggedName, verbose_name=_('Names'), related_name='name_photos')
     album = models.ForeignKey(Album, verbose_name=_('Album'), related_name='photos_album')
 
+    # video and audio info
+    youtube_code = models.CharField(_('YouTube code'), max_length=100, blank=True)
+    soundcloud_code = models.CharField(_('SoundCloud code'), max_length=100, blank=True)
+
     # Timestamp meta information
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
@@ -408,6 +416,22 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def is_video(self):
+        return FileType.get(self.image_file) == FileType.video
+
+    @property
+    def is_audio(self):
+        return FileType.get(self.image_file) == FileType.audio
+
+    @property
+    def is_photo(self):
+        return FileType.get(self.image_file) == FileType.photo
+
+    @property
+    def file_type(self):
+        return FileType.get(self.image_file).name
 
     @property
     def is_horizontal(self):
@@ -458,6 +482,9 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
             return build_absolute_uri(config.FLICKR_PHOTO_URL, '', args=[self.flickr_username, self.flickr_id, ])
 
     def _generate_url(self, width=None, height=None, smart=False, fit_in=False, fill_colour=None, auto_resize=False):
+        if not self.is_photo:
+            return ''
+
         image_url = "{}/{}".format(getattr(settings, 'AWS_LOCATION', ''), self.image.name).strip('/')
 
         # set the correct orientation if force not to be auto-cropped
@@ -506,14 +533,16 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
         Continue if saving image content although get some error extracting it
         """
         # do not extracting metadata while does not image exists
-        if not self.image:
+        if not self.is_photo:
             return
+
         # get image metadata
         metadata = {
             'width': self.image.width or 0,
             'height': self.image.height or 0,
             'size': self.image.size,
         }
+
         # get exif of image file
         if with_exif:
             try:
@@ -529,6 +558,7 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
                     })
             except Exception as exc:
                 logger.error("Error processing exif from {} photo\n\n{}".format(self.title, exc), exc_info=True)
+
         return metadata
 
     def set_metadata(self, only_readable=True, with_exif=True, commit=True):
@@ -538,7 +568,7 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
         False prevail over those calculated from the content of the image.
         """
         # do not updating metadata while does not image exists
-        if not self.image:
+        if not self.is_photo:
             return
 
         # create photo exif if not exist

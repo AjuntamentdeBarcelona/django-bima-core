@@ -404,7 +404,8 @@ class BasePhotoSerializer(ValidatePermissionSerializer, ThumborSerializerMixin, 
 
     class Meta:
         model = Photo
-        fields = ('id', 'title', 'description', 'permissions', 'upload_status')
+        fields = ('id', 'title', 'description', 'permissions', 'upload_status',
+                  'file_type', 'youtube_code', 'soundcloud_code')
 
 
 # Extra info serializers
@@ -818,7 +819,7 @@ class PhotoSerializer(BasePhotoSerializer):
                   'altitude', 'owner', 'categories', 'keywords', 'created_at', 'modified_at', 'album', 'extra_info',
                   'permissions', 'image_flickr', 'names', 'copyright', 'author', 'internal_usage_restriction',
                   'external_usage_restriction', 'identifier', 'original_file_name', 'categorize_date', 'size',
-                  'upload_status')
+                  'upload_status', 'file_type', 'youtube_code', 'soundcloud_code')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
