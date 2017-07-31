@@ -419,19 +419,19 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
 
     @property
     def is_video(self):
-        return FileType.get(self.image_file) == FileType.video
+        return FileType.get_url_file_type(self.image_file) == FileType.video
 
     @property
     def is_audio(self):
-        return FileType.get(self.image_file) == FileType.audio
+        return FileType.get_url_file_type(self.image_file) == FileType.audio
 
     @property
     def is_photo(self):
-        return FileType.get(self.image_file) == FileType.photo
+        return FileType.get_url_file_type(self.image_file) == FileType.photo
 
     @property
     def file_type(self):
-        return FileType.get(self.image_file).name
+        return FileType.get_url_file_type(self.image_file).name
 
     @property
     def is_horizontal(self):
@@ -474,7 +474,11 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
 
     @property
     def image_file(self):
-        return getattr(self.image, 'url', '')
+        try:
+            return self.image.url
+        except ValueError:
+            # the 'image' attribute has no file associated with it
+            return ''
 
     @property
     def image_flickr(self):
