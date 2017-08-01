@@ -537,7 +537,7 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
         Continue if saving image content although get some error extracting it
         """
         # do not extracting metadata while does not image exists
-        if not self.is_photo:
+        if not self.image_file:
             return
 
         # get image metadata
@@ -572,7 +572,7 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
         False prevail over those calculated from the content of the image.
         """
         # do not updating metadata while does not image exists
-        if not self.is_photo:
+        if not self.image_file:
             return
 
         # create photo exif if not exist
