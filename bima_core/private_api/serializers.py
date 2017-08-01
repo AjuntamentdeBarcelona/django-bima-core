@@ -662,13 +662,14 @@ class GallerySerializer(ThumborSerializerMixin, TranslationSerializerMixin, seri
 
     owners = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.active(), many=True)
     cover = serializers.PrimaryKeyRelatedField(queryset=Photo.objects.active(), required=False)
-    extra_info = serializers.SerializerMethodField(read_only=True)
+    extra_info = serializers.SerializerMethodField()
     permissions = PermissionField()
+    image_file_type = serializers.SerializerMethodField()
 
     class Meta:
         model = Gallery
         fields = ('id', 'title', 'description', 'slug', 'photos', 'status', 'created_at', 'modified_at', 'owners',
-                  'extra_info', 'cover', 'permissions', )
+                  'extra_info', 'cover', 'permissions', 'image_file_type')
 
     def get_thumbor_fieldsets(self):
         """
@@ -681,6 +682,13 @@ class GallerySerializer(ThumborSerializerMixin, TranslationSerializerMixin, seri
         Method to serialize extra information from self instance.
         """
         return GalleryExtraInfoSerializer(obj, read_only=True, context=self.context).data
+
+    def get_image_file_type(self, obj):
+        """
+        Returns the file type of the gallery image used as cover.
+        """
+        photo = obj.photo
+        return photo and photo.file_type
 
     def validate_cover(self, value):
         if not self.instance.galleries_membership.filter(photo_id=value.id).exists():
