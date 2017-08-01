@@ -810,7 +810,8 @@ class PhotoSerializer(BasePhotoSerializer):
     categories = serializers.PrimaryKeyRelatedField(queryset=DAMTaxonomy.objects.active(), required=False, many=True)
     keywords = KeywordSerializer(required=False, many=True)
     names = NameSerializer(required=False)
-    extra_info = serializers.SerializerMethodField(read_only=True)
+    extra_info = serializers.SerializerMethodField()
+    download_permission = serializers.SerializerMethodField(method_name='has_download_permission')
 
     class Meta:
         model = Photo
@@ -819,7 +820,7 @@ class PhotoSerializer(BasePhotoSerializer):
                   'altitude', 'owner', 'categories', 'keywords', 'created_at', 'modified_at', 'album', 'extra_info',
                   'permissions', 'image_flickr', 'names', 'copyright', 'author', 'internal_usage_restriction',
                   'external_usage_restriction', 'identifier', 'original_file_name', 'categorize_date', 'size',
-                  'upload_status', 'file_type', 'youtube_code', 'soundcloud_code')
+                  'upload_status', 'file_type', 'youtube_code', 'soundcloud_code', 'download_permission')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -836,7 +837,7 @@ class PhotoSerializer(BasePhotoSerializer):
         """
         thumbor_fields = {'thumbnail', 'small_fit'}
         # if user who request has download permission will receive all photo sizes
-        if self._has_download_permission():
+        if self.has_download_permission():
             thumbor_fields |= {'small', 'medium', 'original', 'large', }
         return ((None, 'image'), thumbor_fields),
 
@@ -846,7 +847,7 @@ class PhotoSerializer(BasePhotoSerializer):
         has download permission
         """
         field_names = super().get_field_names(declared_fields, info)
-        if self._has_download_permission():
+        if self.has_download_permission():
             field_names.append('image_file')
         return field_names
 
@@ -898,7 +899,7 @@ class PhotoSerializer(BasePhotoSerializer):
         """
         return PhotoExtraInfoSerializer(obj, read_only=True, context=self.context).data
 
-    def _has_download_permission(self):
+    def has_download_permission(self, obj=None):
         """
         Validate if the user who requests the photo has permission to download it
         """
