@@ -627,12 +627,13 @@ class AlbumSerializer(ThumborSerializerMixin, TranslationSerializerMixin, BaseAl
     owners = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.active(), many=True)
     photos = serializers.PrimaryKeyRelatedField(read_only=True, source='photos_album', many=True)
     cover = serializers.PrimaryKeyRelatedField(queryset=Photo.objects.active(), required=False)
-    extra_info = serializers.SerializerMethodField(read_only=True)
+    extra_info = serializers.SerializerMethodField()
     permissions = PermissionField()
+    image_file_type = serializers.SerializerMethodField()
 
     class Meta(BaseAlbumSerializer.Meta):
         fields = ('id', 'title', 'description', 'slug', 'created_at', 'modified_at', 'owners', 'photos', 'extra_info',
-                  'cover', 'permissions', )
+                  'cover', 'permissions', 'image_file_type')
 
     def get_thumbor_fieldsets(self):
         """
@@ -645,6 +646,13 @@ class AlbumSerializer(ThumborSerializerMixin, TranslationSerializerMixin, BaseAl
         Method to serialize extra information from self instance.
         """
         return AlbumExtraInfoSerializer(obj, read_only=True, context=self.context).data
+
+    def get_image_file_type(self, obj):
+        """
+        Returns the file type of the gallery image used as cover.
+        """
+        photo = obj.photo
+        return photo and photo.file_type
 
     def validate_cover(self, value):
         if not self.instance.photos_album.filter(id=value.id).exists():
