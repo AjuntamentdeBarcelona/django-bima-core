@@ -90,11 +90,12 @@ class PhotoFilter(FilterMixin, django_filters.FilterSet):
 
 
 class TaxonomyFilter(FilterMixin, django_filters.FilterSet):
+    exclude_slug = django_filters.CharFilter(name='slug', lookup_type='exact', exclude=True)
     root = django_filters.BooleanFilter(name='parent', lookup_type='isnull')
 
     class Meta:
         model = DAMTaxonomy
-        fields = ('parent', 'name', 'slug', 'root', )
+        fields = ('parent', 'name', 'slug', 'exclude_slug', 'root')
 
 
 class GalleryFilter(FilterMixin, django_filters.FilterSet):
