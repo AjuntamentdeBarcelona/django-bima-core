@@ -2,6 +2,7 @@
 import logging
 import os
 import six
+import time
 
 from categories.models import CategoryBase
 from constance import config
@@ -609,6 +610,25 @@ class PhotoChunked(PhotoChunkPermissionMixin, ChunkedUpload):
         verbose_name = _('Photo chunk')
         verbose_name_plural = _('Photo chunks')
         ordering = ('-completed_at', '-status', '-created_at', )
+
+    def close_file(self):
+        """
+        Override ChunkedUpload.close_file to retry to close files if the OS doesn't find them.
+        """
+        file_ = self.file
+        while file_ is not None:
+            file_.close()
+            retries = 0
+            while True:
+                try:
+                    file_ = getattr(file_, 'file', None)
+                    break
+                except FileNotFoundError:
+                    if retries > 2:
+                        raise
+                    logger.warning('File {} not found, sleepping and retrying...'.format(file_))
+                    retries += 1
+                    time.sleep(0.1)
 
 
 class Gallery(GalleryPermissionMixin, AbstractTimestampModel):
