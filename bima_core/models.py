@@ -628,7 +628,7 @@ class PhotoChunked(PhotoChunkPermissionMixin, ChunkedUpload):
                         raise
                     logger.warning('File {} not found, sleepping and retrying...'.format(file_))
                     retries += 1
-                    time.sleep(0.1)
+                    time.sleep(2)
 
 
 class Gallery(GalleryPermissionMixin, AbstractTimestampModel):
