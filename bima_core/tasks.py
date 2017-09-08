@@ -3,7 +3,7 @@ import logging
 import time
 
 from django.apps import apps
-from django.core.files.base import ContentFile
+from django.core.files.base import File, ContentFile
 from django.db.models.utils import make_model_tuple
 from django_rq import job
 from haystack.exceptions import NotHandled
@@ -11,6 +11,7 @@ from haystack.exceptions import NotHandled
 from .constants import RQ_UPLOAD_QUEUE, RQ_HAYSTACK_PHOTO_INDEX_QUEUE
 from .models import Photo, PhotoChunked
 from .utils import get_filename
+from .filetypes import FileType
 
 
 logger = logging.getLogger(__name__)
@@ -21,8 +22,14 @@ def up_image_to_s3(photo_id, image_id):
     try:
         photo = Photo.objects.get(id=photo_id)
         image = PhotoChunked.objects.get(id=image_id)
-        photo.image = ContentFile(image.file.read(), name=image.filename)
-        photo.set_metadata(only_readable=False, commit=False)
+
+        if FileType.get_path_file_type(image.filename) == FileType.photo:
+            photo.image = ContentFile(image.file.read(), name=image.filename)
+            photo.set_metadata(only_readable=False, commit=False)
+        else:
+            photo.image = File(image.file, name=image.filename)
+            photo.size = photo.image.size
+
         if not photo.original_file_name:
             photo.original_file_name = get_filename(image.file.name)
 
