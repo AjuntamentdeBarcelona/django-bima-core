@@ -27,6 +27,10 @@ class FileType(Enum):
     @classmethod
     def get_url_file_type(cls, url):
         path = urlparse(url).path
+        return cls.get_path_file_type(path)
+
+    @classmethod
+    def get_path_file_type(cls, path):
         extension = os.path.splitext(path)[1].lower()
         if extension in IMAGE_EXTENSIONS:
             return cls.photo

@@ -610,6 +610,45 @@ class PhotoChunked(PhotoChunkPermissionMixin, ChunkedUpload):
         verbose_name_plural = _('Photo chunks')
         ordering = ('-completed_at', '-status', '-created_at', )
 
+    def close_file(self):
+        """
+        Remove hack fix for Django 1.4.
+
+        https://github.com/juliomalegria/django-chunked-upload/commit/6889442c5ac86a68300f292f03fb93ca999ff583
+        """
+        self.file.close()
+
+    def open_file(self, mode='rb'):
+        """
+        Made FieldFile.open() respect its mode argument in Django < 1.11.
+
+        https://github.com/django/django/commit/ac1975b18b5a33234284bec86e5a5bb44a4af976
+        """
+        self.file._require_file()
+        if hasattr(self.file, '_file') and self.file._file is not None:
+            self.file.file.open(mode)
+        else:
+            self.file.file = self.file.storage.open(self.file.name, mode)
+
+    def append_chunk(self, chunk, chunk_size=None, save=True):
+        """
+        Override method to fix a bug opening the file.
+        """
+        self.close_file()
+        self.open_file(mode='ab')  # mode = append+binary
+        # We can use .read() safely because chunk is already in memory
+        self.file.write(chunk.read())
+        if chunk_size is not None:
+            self.offset += chunk_size
+        elif hasattr(chunk, 'size'):
+            self.offset += chunk.size
+        else:
+            self.offset = self.file.size
+        self._md5 = None  # Clear cached md5
+        if save:
+            self.save()
+        self.close_file()  # Flush
+
 
 class Gallery(GalleryPermissionMixin, AbstractTimestampModel):
     """
