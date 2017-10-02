@@ -2,11 +2,13 @@
 import logging
 import os
 import six
+import subprocess
 
 from categories.models import CategoryBase
 from constance import config
 from django.conf import settings
 from django.db import models
+from django.core.files.base import File
 from django.utils.text import slugify
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _, ugettext as _i
@@ -336,12 +338,18 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
         (UPLOADED, _('Uploaded')),
     )
 
-    def image_path(instance, filename):
+    def generic_path(instance, filename, root):
         basename, ext = os.path.splitext(filename)
-        fs = HashFS('photos', depth=4, width=2, algorithm='sha256')
+        fs = HashFS(root, depth=4, width=2, algorithm='sha256')
         stream = getattr(instance, 'image').chunks()
         id = fs.computehash(stream)
-        return idpath(fs, id, extension=ext)
+        return idpath(fs, root, id, extension=ext)
+
+    def image_path(instance, filename):
+        return instance.generic_path(filename, 'photos')
+
+    def video_thumbnail_path(instance, filename):
+        return instance.generic_path(filename, 'video_thumbnails')
 
     # new fields
     identifier = models.CharField(max_length=50, verbose_name=_('Identifier'), blank=True, default='')
@@ -405,6 +413,11 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
     # video and audio info
     youtube_code = models.CharField(_('YouTube code'), max_length=100, blank=True)
     soundcloud_code = models.CharField(_('SoundCloud code'), max_length=100, blank=True)
+    video_thumbnail = models.ImageField(upload_to=video_thumbnail_path,
+                                        max_length=200,
+                                        blank=True,
+                                        null=True,
+                                        verbose_name=_('Video thumbnail'))
 
     # Timestamp meta information
     is_active = models.BooleanField(default=True)
@@ -590,6 +603,50 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
         # commit changes
         if commit:
             self.save()
+
+    def generate_video_thumbnail(self, photo_chunked):
+        """
+        If self.image is a video, generates its thumbnail and saves it in S3.
+
+        Returns True if thumbnail was created.
+        """
+        if not self.is_video:
+            logger.warning('File is not a video, thumbnail not generated')
+            return False
+
+        video_path = photo_chunked.file.path
+        thumb_path = os.path.splitext(video_path)[0] + '.jpg'
+        thumb_name = os.path.basename(thumb_path)
+
+        try:
+            command = ['ffmpeg', '-i', video_path, '-vf', 'thumbnail=100',
+                       '-frames:v', '1', '-hide_banner', '-y', thumb_path]
+            proc = subprocess.run(command,
+                                  stdout=subprocess.PIPE,
+                                  stderr=subprocess.STDOUT,
+                                  universal_newlines=True)
+        except FileNotFoundError:
+            logger.exception('ffmpeg binary is not in the PATH, thumbnail not generated.')
+            return False
+
+        if proc.returncode != 0:
+            logger.error(proc.stdout)
+            return False
+
+        try:
+            with open(thumb_path, 'rb') as f:
+                self.video_thumbnail = File(f, name=thumb_name)
+                self.save()
+        except Exception:
+            logger.exception('Error saving video thumbnail')
+            return False
+
+        try:
+            os.remove(thumb_path)
+        except Exception:
+            logger.exception('Error removing video thumbnail')
+
+        return True
 
     class Meta:
         verbose_name = _('Photo')

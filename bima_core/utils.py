@@ -13,18 +13,19 @@ import unicodedata
 from .constants import ADMIN_GROUP_NAME
 
 
-def idpath(fs, id, extension=''):
+def idpath(fs, root, id, extension=''):
     """
-    Build path to upload photos in S3
+    Build path to upload files in S3
     """
+    if root and not root.endswith(os.path.sep):
+        root += os.path.sep
+
     paths = fs.shard(id)
 
-    if extension and not extension.startswith(os.extsep):
-        extension = os.extsep + extension
-    elif not extension:
-        extension = ''
+    if extension and not extension.startswith(os.path.extsep):
+        extension = os.path.extsep + extension
 
-    return os.path.join('photos/', *paths) + extension
+    return os.path.join(root, *paths) + extension
 
 
 def get_filename(path):

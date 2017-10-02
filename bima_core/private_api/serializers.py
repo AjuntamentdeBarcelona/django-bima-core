@@ -895,7 +895,8 @@ class PhotoSerializer(BasePhotoSerializer):
 
         # will update image content, language tagged keywords and tagged names if has valid data
         if image is not None:
-            up_image_to_s3.delay(photo.id, image.id)
+            up_image_to_s3(photo.id, image.id)
+            # up_image_to_s3.delay(photo.id, image.id)
         if keywords is not None:
             self.fields['keywords'].child.update_or_create(photo, keywords, cleanup)
         if names is not None:
