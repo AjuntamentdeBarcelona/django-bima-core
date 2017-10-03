@@ -338,18 +338,18 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
         (UPLOADED, _('Uploaded')),
     )
 
-    def generic_path(instance, filename, root):
+    def generic_path(instance, filename, root, field_name):
         basename, ext = os.path.splitext(filename)
         fs = HashFS(root, depth=4, width=2, algorithm='sha256')
-        stream = getattr(instance, 'image').chunks()
+        stream = getattr(instance, field_name).chunks()
         id = fs.computehash(stream)
         return idpath(fs, root, id, extension=ext)
 
     def image_path(instance, filename):
-        return instance.generic_path(filename, 'photos')
+        return instance.generic_path(filename, root='photos', field_name='image')
 
     def video_thumbnail_path(instance, filename):
-        return instance.generic_path(filename, 'video_thumbnails')
+        return instance.generic_path(filename, root='video_thumbnails', field_name='video_thumbnail')
 
     # new fields
     identifier = models.CharField(max_length=50, verbose_name=_('Identifier'), blank=True, default='')

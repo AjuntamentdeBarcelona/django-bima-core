@@ -7,7 +7,6 @@ from django.core.files.base import File, ContentFile
 from django.db.models.utils import make_model_tuple
 from django_rq import job
 from haystack.exceptions import NotHandled
-# from memory_profiler import profile
 
 from .constants import RQ_UPLOAD_QUEUE, RQ_HAYSTACK_PHOTO_INDEX_QUEUE
 from .models import Photo, PhotoChunked
@@ -19,7 +18,6 @@ logger = logging.getLogger(__name__)
 
 
 @job(RQ_UPLOAD_QUEUE)
-# @profile
 def up_image_to_s3(photo_id, image_id):
     """
     Upload the file to S3. If it's a video, generate its thumbnail and upload it to S3.
