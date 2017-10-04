@@ -47,7 +47,7 @@ class ThumborSerializerMixin(object):
     thumbor_fieldsets = ()
 
     def get_thumbor_fieldsets(self):
-        """`
+        """
         Get thumbor fieldsets defined
         """
         if self.thumbor_fieldsets is None or not is_iterable(self.thumbor_fieldsets):

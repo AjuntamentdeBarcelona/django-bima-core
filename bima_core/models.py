@@ -499,10 +499,12 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
             return build_absolute_uri(config.FLICKR_PHOTO_URL, '', args=[self.flickr_username, self.flickr_id, ])
 
     def _generate_url(self, width=None, height=None, smart=False, fit_in=False, fill_colour=None, auto_resize=False):
-        if not self.is_photo:
+        if self.is_photo:
+            image_url = "{}/{}".format(getattr(settings, 'AWS_LOCATION', ''), self.image.name).strip('/')
+        elif self.is_video and self.video_thumbnail:
+            image_url = "{}/{}".format(getattr(settings, 'AWS_LOCATION', ''), self.video_thumbnail.name).strip('/')
+        else:
             return ''
-
-        image_url = "{}/{}".format(getattr(settings, 'AWS_LOCATION', ''), self.image.name).strip('/')
 
         # set the correct orientation if force not to be auto-cropped
         size = [width, height]

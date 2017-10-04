@@ -33,7 +33,7 @@ def get_filename(path):
 
 
 def is_iterable(obj):
-    return isinstance(obj, list) or isinstance(obj, tuple)
+    return isinstance(obj, (list, tuple, set))
 
 
 def build_absolute_uri(domain, path, args=None, query=None, request=None):
