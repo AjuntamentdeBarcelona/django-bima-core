@@ -606,7 +606,7 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
         if commit:
             self.save()
 
-    def generate_video_thumbnail(self, photo_chunked):
+    def generate_video_thumbnail(self, video_path):
         """
         If self.image is a video, generates its thumbnail and saves it in S3.
 
@@ -616,7 +616,6 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
             logger.warning('File is not a video, thumbnail not generated')
             return False
 
-        video_path = photo_chunked.file.path
         thumb_path = os.path.splitext(video_path)[0] + '.jpg'
         thumb_name = os.path.basename(thumb_path)
 

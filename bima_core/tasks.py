@@ -46,7 +46,7 @@ def up_image_to_s3(photo_id, image_id):
         photo.save()
 
         if filetype == FileType.video:
-            photo.generate_video_thumbnail(image)
+            photo.generate_video_thumbnail(image.file.path)
 
         return photo
     except Photo.DoesNotExist:
