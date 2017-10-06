@@ -156,3 +156,6 @@ haystack_index/
 chunked_uploads/
 photos/
 
+# Google OAuth2
+client_secret.json
+*oauth2.json
