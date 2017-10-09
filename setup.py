@@ -29,6 +29,7 @@ INSTALL_REQUIRES = [
     'dry-rest-permissions>=0.1.8,<0.2',
     'exifread>=2.1.2,<3',
     'flickrapi>=2.1.2,<3',
+    'google-api-python-client>=1.6.4,<1.7',
     'hashfs>=0.7.0,<0.8',
     'python-dateutil>=2.5.3,<3',
     'rest-framework-generic-relations>=1.1.0,<1.2',

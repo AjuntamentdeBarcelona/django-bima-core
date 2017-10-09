@@ -8,7 +8,8 @@ from django.db.models.utils import make_model_tuple
 from django_rq import job
 from haystack.exceptions import NotHandled
 
-from .constants import RQ_UPLOAD_QUEUE, RQ_HAYSTACK_PHOTO_INDEX_QUEUE
+from . import youtube
+from .constants import RQ_UPLOAD_QUEUE, RQ_HAYSTACK_PHOTO_INDEX_QUEUE, RQ_UPLOAD_YOUTUBE_QUEUE
 from .models import Photo, PhotoChunked
 from .utils import get_filename
 from .filetypes import FileType
@@ -109,3 +110,22 @@ def _get_instance(model, instance_id):
             time.sleep(wait_between_attempts)
 
     raise model.DoesNotExist('{} with id {} does not exist'.format(model.__name__, instance_id))
+
+
+@job(RQ_UPLOAD_YOUTUBE_QUEUE)
+def print_youtube_channels(username):
+    """
+    Quick example of Youtube task.
+    """
+    channels = youtube.list_channels(username)
+
+    if not channels:
+        print('No channels for user {}.'.format(username))
+        return
+
+    for channel in channels:
+        print('This channel\'s ID is {}. Its title is {}, and it has {} views.'.format(
+            channel['id'],
+            channel['snippet']['title'],
+            channel['statistics']['viewCount'],
+        ))

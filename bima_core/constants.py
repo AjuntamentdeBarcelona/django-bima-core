@@ -21,7 +21,10 @@ DEFAULT_CONSTANCE = {
     'PAGE_SIZE': (20, 'Number of items of any list. If you clean it, it will be 20 by default.'),
     'LARGE_PAGE_SIZE': (1000, 'Number of items for large custom lists. Used to export logs, for example'),
 
-    'FLICKR_PHOTO_URL': ('https://www.flickr.com/photos/', 'Flickr photos endpoint.')
+    'FLICKR_PHOTO_URL': ('https://www.flickr.com/photos/', 'Flickr photos endpoint.'),
+
+    'GOOGLE_CLIENT_SECRET': ('', "Google's client_secret.json"),
+    'GOOGLE_OAUTH2_TOKEN': ('', "Google's oauth2.json. Don't edit, It's saved programmatically."),
 }
 
 ADMIN_GROUP_NAME = 'admin'
@@ -32,6 +35,7 @@ DEFAULT_GROUPS = (ADMIN_GROUP_NAME, EDITOR_GROUP_NAME, READER_GROUP_NAME, PHOTOG
 
 RQ_UPLOAD_QUEUE = 'upload'
 RQ_HAYSTACK_PHOTO_INDEX_QUEUE = 'haystack-photo-index'
+RQ_UPLOAD_YOUTUBE_QUEUE = 'youtube'
 
 COMPLETED_UPLOAD = 2
 CHAR_REGEX = r'[\w\d]'
