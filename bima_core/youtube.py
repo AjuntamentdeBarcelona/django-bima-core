@@ -10,7 +10,7 @@ from apiclient.discovery import build
 from apiclient.errors import HttpError
 from apiclient.http import MediaFileUpload
 from constance import config
-import httplib
+import http.client
 import httplib2
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
@@ -37,10 +37,10 @@ httplib2.RETRIES = 1
 MAX_RETRIES = 10
 
 # Always retry when these exceptions are raised.
-RETRIABLE_EXCEPTIONS = (IOError, httplib2.HttpLib2Error, httplib.NotConnected,
-                        httplib.IncompleteRead, httplib.ImproperConnectionState,
-                        httplib.CannotSendRequest, httplib.CannotSendHeader,
-                        httplib.ResponseNotReady, httplib.BadStatusLine)
+RETRIABLE_EXCEPTIONS = (IOError, httplib2.HttpLib2Error, http.client.NotConnected,
+                        http.client.IncompleteRead, http.client.ImproperConnectionState,
+                        http.client.CannotSendRequest, http.client.CannotSendHeader,
+                        http.client.ResponseNotReady, http.client.BadStatusLine)
 
 # Always retry when an apiclient.errors.HttpError with one of these status
 # codes is raised.
@@ -120,50 +120,41 @@ def get_authenticated_service(args=None):
     return build(API_SERVICE_NAME, API_VERSION, http=credentials.authorize(httplib2.Http()))
 
 
-def list_channels(username):
+def list_channels():
     service = get_authenticated_service()
-    response = service.channels().list(part='snippet,contentDetails,statistics',
-                                       forUsername=username).execute()
+    params = {
+        'part': 'snippet',
+        'mine': True,
+    }
+    response = service.channels().list(**params).execute()
     return response['items']
 
 
-# TODO: WIP: upload videos to Youtube.
-# Based on https://developers.google.com/youtube/v3/docs/videos/insert.
-
-def upload_video(photo):
+def upload_video(file_path, title='', description='', tags='', privacy='private'):
     """
-    Upload the models.Photo video instance as private video if it's not already uploaded.
+    Upload video file to Youtube with auto resume.
+
+    Based on https://developers.google.com/youtube/v3/docs/videos/insert.
     """
-    if photo.youtube_code:
-        logger.warning('Video already in Youtube', extra={
-            'photo': photo,
-            'youtube_code': photo.youtube_code
-        })
-        return
-
-    if not photo.is_video:
-        logger.warning('Photo is not a video', extra={'photo': photo})
-        return
-
     service = get_authenticated_service()
     try:
-        _initialize_upload(
+        return _initialize_upload(
             service=service,
             body={
                 'snippet': {
-                    'title': photo.title,
-                    'description': photo.description,
-                    'tags': photo.keywords,
-                    # 'category': photo.categories[0],  # TODO: Category or Youtube channel?
+                    'title': title,
+                    'description': description,
+                    'tags': tags,
                 },
                 'status': {
-                    'provacyStatus': 'private',
+                    'privacyStatus': privacy,
                 },
             },
-            file_path=photo.image.url,  # TODO: Download the file to a local temp dir
+            file_path=file_path
         )
     except HttpError as e:
         logger.exception("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))
+        raise
 
 
 def _initialize_upload(service, body, file_path):
@@ -186,12 +177,14 @@ def _initialize_upload(service, body, file_path):
         # 1024 * 1024 (1 megabyte).
         media_body=MediaFileUpload(file_path, chunksize=-1, resumable=True)
     )
-    _resumable_upload(insert_request)
+    return _resumable_upload(insert_request)
 
 
 def _resumable_upload(insert_request):
     """
     This method implements an exponential backoff strategy to resume a failed upload.
+
+    TODO: Better error handling.
     """
     response = None
     error = None
@@ -225,3 +218,4 @@ def _resumable_upload(insert_request):
             sleep_seconds = random.random() * max_sleep
             logger.debug("Sleeping %f seconds and then retrying..." % sleep_seconds)
             time.sleep(sleep_seconds)
+    return response
