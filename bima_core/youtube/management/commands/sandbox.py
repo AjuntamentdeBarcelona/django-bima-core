@@ -3,14 +3,14 @@
 from pprint import pprint
 from django.core.management.base import BaseCommand
 
-from ... import tasks, youtube
+from ... import tasks, api
 
 
 class Command(BaseCommand):
     help = "Temp command to try things..."
 
     def handle(self, *args, **options):
-        channels = youtube.list_channels()
+        channels = api.list_channels()
         for channel in channels:
             pprint(channel)
 
