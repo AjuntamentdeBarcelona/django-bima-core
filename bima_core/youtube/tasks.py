@@ -15,6 +15,9 @@ from .models import YoutubeChannel
 logger = logging.getLogger(__name__)
 
 
+CHUNK_SIZE = 10 * 2 ** 20  # 10 MB
+
+
 @job(RQ_UPLOAD_YOUTUBE_QUEUE)
 def upload_video_youtube(youtube_channel_pk, photo_pk):
     """
@@ -41,7 +44,8 @@ def upload_video_youtube(youtube_channel_pk, photo_pk):
             logger.debug('Workdir: {}'.format(dirname))
             video_path = os.path.join(dirname, os.path.basename(photo.image.name))
             with open(video_path, 'wb') as video_file:
-                video_file.write(photo.image.read())  # TODO: read and write in chunks.
+                for chunk in photo.image.chunks(CHUNK_SIZE):
+                    video_file.write(chunk)
             response = api.upload_video(channel, video_path, photo.title, photo.description)
             logger.debug(response)
             photo.youtube_code = response['id']
