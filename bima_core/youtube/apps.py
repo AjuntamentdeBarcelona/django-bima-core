@@ -4,4 +4,4 @@ from django.apps import AppConfig
 
 
 class PrivateApiConfig(AppConfig):
-    name = 'bim_core.youtube'
+    name = 'bima_core.youtube'

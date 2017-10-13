@@ -3,13 +3,11 @@
 import logging
 import os
 import random
-import tempfile
 import time
 
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 from apiclient.http import MediaFileUpload
-from constance import config
 import http.client
 import httplib2
 from oauth2client.client import flow_from_clientsecrets
@@ -47,43 +45,7 @@ RETRIABLE_EXCEPTIONS = (IOError, httplib2.HttpLib2Error, http.client.NotConnecte
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
 
 
-def _get_client_secret():
-    """
-    Creates a temp file with the client_secret.json content from django-constance
-    and returns its path.
-    """
-    path = None
-    with tempfile.NamedTemporaryFile(mode='w', delete=False) as client_secret:
-        client_secret.write(config.GOOGLE_CLIENT_SECRET)
-        path = client_secret.name
-    logger.debug('client secret path: {}'.format(path))
-    return path
-
-
-def _get_token():
-    """
-    Creates a temp file with the oauth2.json token content from django-constance
-    and returns its path.
-    """
-    path = None
-    with tempfile.NamedTemporaryFile(mode='w', delete=False) as token:
-        if config.GOOGLE_OAUTH2_TOKEN:
-            token.write(config.GOOGLE_OAUTH2_TOKEN)
-        path = token.name
-    logger.debug('oauth2 token path: {}'.format(path))
-    return path
-
-
-def _set_token(path):
-    """
-    Writes oauth2.json content in django-constance.
-    """
-    with open(path) as token:
-        config.GOOGLE_OAUTH2_TOKEN = token.read()
-    logger.debug('oauth2 token saved in django-constance')
-
-
-def get_authenticated_service(args=None):
+def get_authenticated_service(youtube_channel):
     """
     Authorize the request and store authorization credentials.
 
@@ -96,32 +58,36 @@ def get_authenticated_service(args=None):
     https://12factor.net
     https://developers.google.com/youtube/v3/guides/auth/server-side-web-apps
     """
-    client_secret_path = _get_client_secret()
+    client_secret_path = youtube_channel.client_secret_to_file()
     flow = flow_from_clientsecrets(client_secret_path,
                                    scope=YOUTUBE_READ_WRITE_SSL_SCOPE,
                                    message=MISSING_CLIENT_SECRETS_MESSAGE)
     flow.params['access_type'] = 'offline'  # auto refresh token
     flow.params['include_granted_scopes'] = 'true'
 
-    token_path = _get_token()
+    token_path = youtube_channel.token_to_file()
     storage = Storage(token_path)
     credentials = storage.get()
 
     if credentials is None or credentials.invalid:
-        if args is None:
-            # Force to print Google auth URL in the terminal.
-            args = argparser.parse_args(args=['--noauth_local_webserver'])
+        print('Please, choose channel "{} ({})" from account "{}".'.format(
+            youtube_channel.name, youtube_channel.channel_id, youtube_channel.account.username))
+        # Force to print Google auth URL in the terminal.
+        args = argparser.parse_args(args=['--noauth_local_webserver'])
         credentials = run_flow(flow, storage, args)
-        _set_token(token_path)
+        youtube_channel.save_token_from_file(token_path)
 
     os.remove(client_secret_path)
+    logger.info('File {} deleted.'.format(client_secret_path))
+
     os.remove(token_path)
+    logger.info('File {} deleted.'.format(token_path))
 
     return build(API_SERVICE_NAME, API_VERSION, http=credentials.authorize(httplib2.Http()))
 
 
-def list_channels():
-    service = get_authenticated_service()
+def list_channels(youtube_channel):
+    service = get_authenticated_service(youtube_channel)
     params = {
         'part': 'snippet',
         'mine': True,
@@ -130,13 +96,13 @@ def list_channels():
     return response['items']
 
 
-def upload_video(file_path, title='', description='', tags='', privacy='private'):
+def upload_video(youtube_channel, file_path, title='', description='', tags='', privacy='private'):
     """
     Upload video file to Youtube with auto resume.
 
     Based on https://developers.google.com/youtube/v3/docs/videos/insert.
     """
-    service = get_authenticated_service()
+    service = get_authenticated_service(youtube_channel)
     try:
         return _initialize_upload(
             service=service,

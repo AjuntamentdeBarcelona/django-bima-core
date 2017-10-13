@@ -1,17 +1,12 @@
 # encoding: utf-8
 
-from pprint import pprint
 from django.core.management.base import BaseCommand
 
-from ... import tasks, api
+from ... import tasks
 
 
 class Command(BaseCommand):
     help = "Temp command to try things..."
 
     def handle(self, *args, **options):
-        channels = api.list_channels()
-        for channel in channels:
-            pprint(channel)
-
-        tasks.upload_video_youtube.delay(photo_pk=136)
+        tasks.upload_video_youtube.delay(youtube_channel_pk=2, photo_pk=136)

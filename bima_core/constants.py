@@ -22,9 +22,6 @@ DEFAULT_CONSTANCE = {
     'LARGE_PAGE_SIZE': (1000, 'Number of items for large custom lists. Used to export logs, for example'),
 
     'FLICKR_PHOTO_URL': ('https://www.flickr.com/photos/', 'Flickr photos endpoint.'),
-
-    'GOOGLE_CLIENT_SECRET': ('', "Google's client_secret.json"),
-    'GOOGLE_OAUTH2_TOKEN': ('', "Google's oauth2.json. Don't edit, It's saved programmatically."),
 }
 
 ADMIN_GROUP_NAME = 'admin'
