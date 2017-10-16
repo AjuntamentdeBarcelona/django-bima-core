@@ -5,18 +5,22 @@ from django.utils.translation import ugettext as _i
 from drf_chunked_upload.views import ChunkedUploadView
 from drf_haystack.generics import HaystackGenericAPIView
 from dry_rest_permissions.generics import DRYPermissions
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.authtoken import views as auth_views
 from rest_framework.filters import DjangoFilterBackend
 from rest_framework.generics import ListAPIView as _ListAPIView, RetrieveAPIView as _RetrieveAPIView, \
     CreateAPIView as _CreateAPIView, UpdateAPIView as _UpdateAPIView
 from rest_framework.mixins import CreateModelMixin, DestroyModelMixin, ListModelMixin
 from rest_framework.parsers import MultiPartParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_swagger.views import get_swagger_view
 
-from bima_core.models import Album, DAMTaxonomy, Gallery, GalleryMembership, Group, Photo, PhotoChunked, AccessLog, \
+from ..models import Album, DAMTaxonomy, Gallery, GalleryMembership, Group, Photo, PhotoChunked, AccessLog, \
     Copyright, UsageRight, PhotoAuthor, TaggedKeyword, TaggedName, PhotoType
+from ..youtube.models import YoutubeChannel
+from ..youtube.tasks import upload_video_youtube
 
 from .backends import HaystackDjangoFilterBackend
 from .filters import PhotoFilter, UserFilter, AlbumFilter, TaxonomyFilter, GalleryFilter, GroupFilter, \
@@ -28,7 +32,7 @@ from .serializers import GroupSerializer, UserSerializer, AlbumSerializer, Photo
     TaxonomyListSerializer, GallerySerializer, GalleryMembershipSerializer, AccessLogSerializer, \
     PhotoFlickrSerializer, PhotoChunkedSerializer, WhoAmISerializer, CopyrightSerializer, UsageRightSerializer, \
     PhotoAuthorSerializer, PhotoSearchSerializer, KeywordTagSerializer, NameTagSerializer, PhotoUpdateSerializer, \
-    BasePhotoSerializer, AuthTokenSerializer, PhotoTypeSerializer, TaxonomyLevelSerializer
+    BasePhotoSerializer, AuthTokenSerializer, PhotoTypeSerializer, TaxonomyLevelSerializer, YoutubeChannelSerializer
 
 schema_view = get_swagger_view(title=_i('BIMA Core: Private API'))
 
@@ -489,3 +493,36 @@ class PhotoTypeViewSet(FilterReadOnlyModelViewSet):
     serializer_class = PhotoTypeSerializer
     queryset = PhotoType.objects.all()
     filter_class = PhotoTypeFilter
+
+
+# Youtube related views
+
+
+class YoutubeChannelList(ListAPIView):
+    """
+    API to list Youtube channels
+    """
+    serializer_class = YoutubeChannelSerializer
+    queryset = YoutubeChannel.objects.all()
+    pagination_class = MaxPagination
+
+
+class YoutubeUpload(APIView):
+    """
+    API to upload video to Youtube in a background task
+    """
+    serializer_class = None
+
+    def post(self, request, *args, **kwargs):
+        photo_pk = request.data.get('photo_pk')
+        if not Photo.objects.filter(pk=photo_pk).exists():
+            content = {'detail': 'Photo not found'}
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
+
+        youtube_channel_pk = request.data.get('youtube_channel_pk')
+        if not YoutubeChannel.object.filter(youtube_channel_pk).exists():
+            content = {'detail': 'Youtube channel not found'}
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
+
+        upload_video_youtube.delay(youtube_channel_pk, photo_pk)
+        return Response({'success': 'Youtube upload task started.'})

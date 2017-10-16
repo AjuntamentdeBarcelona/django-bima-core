@@ -6,11 +6,13 @@ import tempfile
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from ..permissions import ReadPermissionMixin
+
 
 logger = logging.getLogger(__name__)
 
 
-class YoutubeAccount(models.Model):
+class YoutubeAccount(ReadPermissionMixin, models.Model):
     username = models.CharField(_('Username'), max_length=100, unique=True, help_text=_(
         'Example: user@company.com'))
     client_secret = models.TextField(_('Client secret'), help_text=_(
@@ -37,7 +39,7 @@ class YoutubeAccount(models.Model):
         return path
 
 
-class YoutubeChannel(models.Model):
+class YoutubeChannel(ReadPermissionMixin, models.Model):
     name = models.CharField(_('Name'), max_length=100, help_text=_('Informative name for users.'))
     channel_id = models.CharField(_('Channel id'), max_length=100, unique=True, help_text=_(
         'Example: UCT0ndP9FPOea9dgPkqB74Pw'))

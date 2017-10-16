@@ -25,6 +25,8 @@ from bima_core.tasks import up_image_to_s3
 from bima_core.translation import TranslationMixin
 from bima_core.utils import belongs_to_admin_group, is_iterable, is_staff_or_superuser
 
+from ..youtube.models import YoutubeAccount, YoutubeChannel
+
 from .fields import UserPermissionsField, PermissionField
 from .forms import PasswordResetForm
 
@@ -1056,3 +1058,22 @@ class PhotoFlickrSerializer(ReadOnlyFieldMixin, PhotoSerializer):
             self.request.user, validated_data['album'], validated_data['photo'],
             validated_data['author'], validated_data['copyright']
         )
+
+
+# Youtube serializers
+
+
+class YoutubeAccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = YoutubeAccount
+        fields = ('username',)
+        read_only_fields = fields
+
+
+class YoutubeChannelSerializer(serializers.ModelSerializer):
+    account = YoutubeAccountSerializer()
+
+    class Meta:
+        model = YoutubeChannel
+        fields = ('name', 'channel_id', 'account')
+        read_only_fields = fields
