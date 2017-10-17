@@ -1075,5 +1075,26 @@ class YoutubeChannelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = YoutubeChannel
-        fields = ('name', 'channel_id', 'account')
+        fields = ('id', 'name', 'channel_id', 'account')
         read_only_fields = fields
+
+
+class AlbumYoutubeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Album
+        fields = ('id', 'title')
+        read_only_fields = fields
+
+
+class PhotoYoutubeSerializer(serializers.ModelSerializer):
+    album = AlbumYoutubeSerializer()
+
+    class Meta:
+        model = Photo
+        fields = ('id', 'title', 'album')
+        read_only_fields = fields
+
+
+class YoutubeSerializer(serializers.Serializer):
+    photo = PhotoYoutubeSerializer()
+    youtube_channels = YoutubeChannelSerializer(many=True)

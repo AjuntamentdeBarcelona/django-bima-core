@@ -32,7 +32,7 @@ from .serializers import GroupSerializer, UserSerializer, AlbumSerializer, Photo
     TaxonomyListSerializer, GallerySerializer, GalleryMembershipSerializer, AccessLogSerializer, \
     PhotoFlickrSerializer, PhotoChunkedSerializer, WhoAmISerializer, CopyrightSerializer, UsageRightSerializer, \
     PhotoAuthorSerializer, PhotoSearchSerializer, KeywordTagSerializer, NameTagSerializer, PhotoUpdateSerializer, \
-    BasePhotoSerializer, AuthTokenSerializer, PhotoTypeSerializer, TaxonomyLevelSerializer, YoutubeChannelSerializer
+    BasePhotoSerializer, AuthTokenSerializer, PhotoTypeSerializer, TaxonomyLevelSerializer, YoutubeSerializer
 
 schema_view = get_swagger_view(title=_i('BIMA Core: Private API'))
 
@@ -498,29 +498,37 @@ class PhotoTypeViewSet(FilterReadOnlyModelViewSet):
 # Youtube related views
 
 
-class YoutubeChannelList(ListAPIView):
+class YoutubeChannelList(APIView):
     """
-    API to list Youtube channels
+    API to list Youtube channels with photo and album info
     """
-    serializer_class = YoutubeChannelSerializer
-    queryset = YoutubeChannel.objects.all()
-    pagination_class = MaxPagination
+    def get(self, request, *args, **kwargs):
+        photo_pk = kwargs['pk']
+        try:
+            photo = Photo.objects.filter(pk=photo_pk).only(
+                'id', 'title', 'album__id', 'album__title'
+            )[:1][0]
+        except IndexError:
+            content = {'detail': 'Photo not found'}
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
+
+        data = {'photo': photo, 'youtube_channels': YoutubeChannel.objects.all()}
+        serializer = YoutubeSerializer(data)
+        return Response(serializer.data)
 
 
 class YoutubeUpload(APIView):
     """
     API to upload video to Youtube in a background task
     """
-    serializer_class = None
-
     def post(self, request, *args, **kwargs):
-        photo_pk = request.data.get('photo_pk')
+        photo_pk = kwargs['pk']
         if not Photo.objects.filter(pk=photo_pk).exists():
             content = {'detail': 'Photo not found'}
             return Response(content, status=status.HTTP_404_NOT_FOUND)
 
-        youtube_channel_pk = request.data.get('youtube_channel_pk')
-        if not YoutubeChannel.object.filter(youtube_channel_pk).exists():
+        youtube_channel_pk = kwargs['channel_pk']
+        if not YoutubeChannel.objects.filter(pk=youtube_channel_pk).exists():
             content = {'detail': 'Youtube channel not found'}
             return Response(content, status=status.HTTP_404_NOT_FOUND)
 
