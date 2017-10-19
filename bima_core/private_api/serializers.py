@@ -936,7 +936,7 @@ class PhotoChunkedSerializer(ChunkedUploadSerializer):
     """
     file = serializers.FileField()
     permissions = PermissionField()
-    md5 = serializers.CharField(max_length=32, required=False)
+    md5 = serializers.CharField(source='md5_missing_file', max_length=32, required=False)
     status_display = serializers.CharField(source='get_status_display', read_only=True)
 
     def get_url(self, obj):

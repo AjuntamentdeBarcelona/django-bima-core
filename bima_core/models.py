@@ -576,6 +576,17 @@ class PhotoChunked(PhotoChunkPermissionMixin, ChunkedUpload):
         verbose_name_plural = _('Photo chunks')
         ordering = ('-completed_at', '-status', '-created_at', )
 
+    @property
+    def md5_missing_file(self):
+        """
+        Returns the md5 of the file or '' if the file does not exist.
+        """
+        try:
+            return self.md5
+        except FileNotFoundError:
+            logger.debug('File not found')
+            return ''
+
 
 class Gallery(GalleryPermissionMixin, AbstractTimestampModel):
     """
