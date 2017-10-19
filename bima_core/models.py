@@ -649,6 +649,17 @@ class PhotoChunked(PhotoChunkPermissionMixin, ChunkedUpload):
             self.save()
         self.close_file()  # Flush
 
+    @property
+    def md5_missing_file(self):
+        """
+        Returns the md5 of the file or '' if the file does not exist.
+        """
+        try:
+            return self.md5
+        except FileNotFoundError:
+            logger.debug('File not found')
+            return ''
+
 
 class Gallery(GalleryPermissionMixin, AbstractTimestampModel):
     """
