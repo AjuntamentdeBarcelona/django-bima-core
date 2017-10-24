@@ -15,7 +15,7 @@ from .models import YoutubeChannel
 logger = logging.getLogger(__name__)
 
 
-CHUNK_SIZE = 10 * 2 ** 20  # 10 MB
+CHUNK_SIZE = 100 * 2 ** 20  # 100 MB
 
 
 @job(RQ_UPLOAD_YOUTUBE_QUEUE)

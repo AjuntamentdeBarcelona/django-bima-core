@@ -44,6 +44,9 @@ RETRIABLE_EXCEPTIONS = (IOError, httplib2.HttpLib2Error, http.client.NotConnecte
 # codes is raised.
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
 
+# Size in bytes of chunks to upload to Youtube.
+CHUNK_SIZE = 100 * 2 ** 20  # 100 MB
+
 
 def get_authenticated_service(youtube_channel):
     """
@@ -141,7 +144,7 @@ def _initialize_upload(service, body, file_path):
         # practice, but if you're using Python older than 2.6 or if you're
         # running on App Engine, you should set the chunksize to something like
         # 1024 * 1024 (1 megabyte).
-        media_body=MediaFileUpload(file_path, chunksize=-1, resumable=True)
+        media_body=MediaFileUpload(file_path, chunksize=CHUNK_SIZE, resumable=True)
     )
     return _resumable_upload(insert_request)
 
