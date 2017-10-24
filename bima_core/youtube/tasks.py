@@ -4,6 +4,7 @@ import logging
 import os
 from tempfile import TemporaryDirectory
 
+from django.conf import settings
 from django_rq import job
 from bima_core.constants import RQ_UPLOAD_YOUTUBE_QUEUE
 from bima_core.models import Photo
@@ -39,6 +40,8 @@ def upload_video_youtube(youtube_channel_pk, photo_pk):
         logger.error('Photo is not a video', extra={'photo_pk': photo_pk})
         return
 
+    tags = [kw.tag.name for kw in photo.keywords.filter(language=settings.LANGUAGE_CODE)]
+
     try:
         with TemporaryDirectory() as dirname:
             logger.debug('Workdir: {}'.format(dirname))
@@ -46,7 +49,7 @@ def upload_video_youtube(youtube_channel_pk, photo_pk):
             with open(video_path, 'wb') as video_file:
                 for chunk in photo.image.chunks(CHUNK_SIZE):
                     video_file.write(chunk)
-            response = api.upload_video(channel, video_path, photo.title, photo.description)
+            response = api.upload_video(channel, video_path, photo.title, photo.description, tags)
             logger.debug(response)
             photo.youtube_code = response['id']
             photo.save()

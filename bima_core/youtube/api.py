@@ -89,17 +89,7 @@ def get_authenticated_service(youtube_channel):
     return build(API_SERVICE_NAME, API_VERSION, http=credentials.authorize(httplib2.Http()))
 
 
-def list_channels(youtube_channel):
-    service = get_authenticated_service(youtube_channel)
-    params = {
-        'part': 'snippet',
-        'mine': True,
-    }
-    response = service.channels().list(**params).execute()
-    return response['items']
-
-
-def upload_video(youtube_channel, file_path, title='', description='', tags='', privacy='private'):
+def upload_video(youtube_channel, file_path, title, description='', tags=None, privacy='private'):
     """
     Upload video file to Youtube with auto resume.
 
@@ -113,7 +103,7 @@ def upload_video(youtube_channel, file_path, title='', description='', tags='', 
                 'snippet': {
                     'title': title,
                     'description': description,
-                    'tags': tags,
+                    'tags': tags or [],
                 },
                 'status': {
                     'privacyStatus': privacy,
