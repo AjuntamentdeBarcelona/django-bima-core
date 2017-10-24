@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 
-from bima_core.constants import DEFAULT_CONSTANCE, RQ_UPLOAD_QUEUE, RQ_HAYSTACK_PHOTO_INDEX_QUEUE
+from bima_core.constants import (DEFAULT_CONSTANCE, RQ_UPLOAD_QUEUE, RQ_HAYSTACK_PHOTO_INDEX_QUEUE,
+                                 RQ_UPLOAD_YOUTUBE_QUEUE)
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
 
     'bima_core',
     'bima_core.private_api',
+    'bima_core.youtube',
 
     'django_mptt_admin',
     'categories',
@@ -155,21 +157,17 @@ HAYSTACK_CONNECTIONS = {
 HAYSTACK_DEFAULT_OPERATOR = "OR"
 HAYSTACK_SIGNAL_PROCESSOR = 'bima_core.signals.PhotoSignalProcessor'
 
+_RQ_DEFAULT_QUEUE_CONFIG = {
+    "HOST": "localhost",
+    "PORT": 6379,
+    "DB": 0,
+    "PASSWORD": "",
+    "DEFAULT_TIMEOUT": 500,
+}
 RQ_QUEUES = {
-    RQ_UPLOAD_QUEUE: {
-        "HOST": "localhost",
-        "PORT": 6379,
-        "DB": 0,
-        "PASSWORD": "",
-        "DEFAULT_TIMEOUT": 500,
-    },
-    RQ_HAYSTACK_PHOTO_INDEX_QUEUE: {
-        "HOST": "localhost",
-        "PORT": 6379,
-        "DB": 0,
-        "PASSWORD": "",
-        "DEFAULT_TIMEOUT": 500,
-    },
+    RQ_UPLOAD_QUEUE: _RQ_DEFAULT_QUEUE_CONFIG,
+    RQ_HAYSTACK_PHOTO_INDEX_QUEUE: _RQ_DEFAULT_QUEUE_CONFIG,
+    RQ_UPLOAD_YOUTUBE_QUEUE: _RQ_DEFAULT_QUEUE_CONFIG,
 }
 
 REST_FRAMEWORK = {
