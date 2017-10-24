@@ -48,6 +48,10 @@ RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
 CHUNK_SIZE = 100 * 2 ** 20  # 100 MB
 
 
+class YoutubeAPIError(Exception):
+    """Base exception for Youtube API errors."""
+
+
 def get_authenticated_service(youtube_channel):
     """
     Authorize the request and store authorization credentials.
@@ -56,37 +60,42 @@ def get_authenticated_service(youtube_channel):
     to do the authorization manually.
 
     In order to be 12 factors friendly, client_secret.json and oauth2.json
-    files are read from and written to django-constance.
+    files are read from and written to database.
 
     https://12factor.net
     https://developers.google.com/youtube/v3/guides/auth/server-side-web-apps
     """
-    client_secret_path = youtube_channel.client_secret_to_file()
-    flow = flow_from_clientsecrets(client_secret_path,
-                                   scope=YOUTUBE_READ_WRITE_SSL_SCOPE,
-                                   message=MISSING_CLIENT_SECRETS_MESSAGE)
-    flow.params['access_type'] = 'offline'  # auto refresh token
-    flow.params['include_granted_scopes'] = 'true'
+    try:
+        client_secret_path = youtube_channel.client_secret_to_file()
+        flow = flow_from_clientsecrets(client_secret_path,
+                                       scope=YOUTUBE_READ_WRITE_SSL_SCOPE,
+                                       message=MISSING_CLIENT_SECRETS_MESSAGE)
+        flow.params['access_type'] = 'offline'  # auto refresh token
+        flow.params['include_granted_scopes'] = 'true'
 
-    token_path = youtube_channel.token_to_file()
-    storage = Storage(token_path)
-    credentials = storage.get()
+        token_path = youtube_channel.token_to_file()
+        storage = Storage(token_path)
+        credentials = storage.get()
 
-    if credentials is None or credentials.invalid:
-        print('Please, choose channel "{} ({})" from account "{}".'.format(
-            youtube_channel.name, youtube_channel.channel_id, youtube_channel.account.username))
-        # Force to print Google auth URL in the terminal.
-        args = argparser.parse_args(args=['--noauth_local_webserver'])
-        credentials = run_flow(flow, storage, args)
-        youtube_channel.save_token_from_file(token_path)
+        if credentials is None or credentials.invalid:
+            print('Please, choose channel "{} ({})" from account "{}".'.format(
+                youtube_channel.name,
+                youtube_channel.channel_id,
+                youtube_channel.account.username))
+            # Force to print Google auth URL in the terminal.
+            args = argparser.parse_args(args=['--noauth_local_webserver'])
+            credentials = run_flow(flow, storage, args)
+            youtube_channel.save_token_from_file(token_path)
 
-    os.remove(client_secret_path)
-    logger.info('File {} deleted.'.format(client_secret_path))
+        os.remove(client_secret_path)
+        logger.info('File {} deleted.'.format(client_secret_path))
 
-    os.remove(token_path)
-    logger.info('File {} deleted.'.format(token_path))
+        os.remove(token_path)
+        logger.info('File {} deleted.'.format(token_path))
 
-    return build(API_SERVICE_NAME, API_VERSION, http=credentials.authorize(httplib2.Http()))
+        return build(API_SERVICE_NAME, API_VERSION, http=credentials.authorize(httplib2.Http()))
+    except Exception as e:
+        raise YoutubeAPIError("Error getting authenticated service") from e
 
 
 def upload_video(youtube_channel, file_path, title, description='', tags=None, privacy='private'):
@@ -96,24 +105,20 @@ def upload_video(youtube_channel, file_path, title, description='', tags=None, p
     Based on https://developers.google.com/youtube/v3/docs/videos/insert.
     """
     service = get_authenticated_service(youtube_channel)
-    try:
-        return _initialize_upload(
-            service=service,
-            body={
-                'snippet': {
-                    'title': title,
-                    'description': description,
-                    'tags': tags or [],
-                },
-                'status': {
-                    'privacyStatus': privacy,
-                },
+    return _initialize_upload(
+        service=service,
+        body={
+            'snippet': {
+                'title': title,
+                'description': description,
+                'tags': tags or [],
             },
-            file_path=file_path
-        )
-    except HttpError as e:
-        logger.exception("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))
-        raise
+            'status': {
+                'privacyStatus': privacy,
+            },
+        },
+        file_path=file_path
+    )
 
 
 def _initialize_upload(service, body, file_path):
@@ -142,39 +147,36 @@ def _initialize_upload(service, body, file_path):
 def _resumable_upload(insert_request):
     """
     This method implements an exponential backoff strategy to resume a failed upload.
-
-    TODO: Better error handling.
     """
     response = None
     error = None
     retry = 0
+
     while response is None:
         try:
-            logger.debug("Uploading file...")
+            logger.info("Uploading file...")
             status, response = insert_request.next_chunk()
             if response is not None:
                 if 'id' in response:
-                    logger.debug("Video id '%s' was successfully uploaded." % response['id'])
+                    logger.info("Video id '%s' was successfully uploaded." % response['id'])
                 else:
-                    logger.error("The upload failed with an unexpected response: %s" % response)
-                    return
+                    raise YoutubeAPIError("Upload failed with unexpected response: %s" % response)
         except HttpError as e:
             if e.resp.status in RETRIABLE_STATUS_CODES:
-                error = "A retriable HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+                error = "Retriable HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
             else:
-                raise
+                raise YoutubeAPIError("Non retriable error occurred uploading a video") from e
         except RETRIABLE_EXCEPTIONS as e:
-            error = "A retriable error occurred: %s" % e
+            error = "Retriable error occurred: %s" % e
 
         if error is not None:
             logger.debug(error)
             retry += 1
             if retry > MAX_RETRIES:
-                logger.error("No longer attempting to retry.")
-                return
-
+                raise YoutubeAPIError("No longer attempting to retry. Last error: %s" % error)
             max_sleep = 2 ** retry
             sleep_seconds = random.random() * max_sleep
             logger.debug("Sleeping %f seconds and then retrying..." % sleep_seconds)
             time.sleep(sleep_seconds)
+
     return response
