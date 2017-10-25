@@ -830,6 +830,7 @@ class PhotoSerializer(BasePhotoSerializer):
     names = NameSerializer(required=False)
     extra_info = serializers.SerializerMethodField()
     download_permission = serializers.SerializerMethodField(method_name='has_download_permission')
+    can_upload_youtube = serializers.SerializerMethodField()
 
     class Meta:
         model = Photo
@@ -838,7 +839,8 @@ class PhotoSerializer(BasePhotoSerializer):
                   'altitude', 'owner', 'categories', 'keywords', 'created_at', 'modified_at', 'album', 'extra_info',
                   'permissions', 'image_flickr', 'names', 'copyright', 'author', 'internal_usage_restriction',
                   'external_usage_restriction', 'identifier', 'original_file_name', 'categorize_date', 'size',
-                  'upload_status', 'file_type', 'youtube_code', 'soundcloud_code', 'download_permission')
+                  'upload_status', 'file_type', 'youtube_code', 'soundcloud_code', 'download_permission',
+                  'can_upload_youtube')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -868,6 +870,9 @@ class PhotoSerializer(BasePhotoSerializer):
         if self.has_download_permission():
             field_names.append('image_file')
         return field_names
+
+    def get_can_upload_youtube(self, obj):
+        return YoutubeChannel.objects.exists()
 
     def validate(self, attrs):
         """
