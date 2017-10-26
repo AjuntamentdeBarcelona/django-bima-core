@@ -872,7 +872,7 @@ class PhotoSerializer(BasePhotoSerializer):
         return field_names
 
     def get_can_upload_youtube(self, obj):
-        return YoutubeChannel.objects.exists()
+        return YoutubeChannel.configured_channel_exist()
 
     def validate(self, attrs):
         """

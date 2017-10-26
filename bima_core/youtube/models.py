@@ -54,6 +54,10 @@ class YoutubeChannel(ReadPermissionMixin, models.Model):
     def __str__(self):
         return self.name
 
+    @classmethod
+    def configured_channel_exist(cls):
+        return cls.objects.exclude(models.Q(token='') | models.Q(token__isnull=True)).exists()
+
     def token_to_file(self):
         """
         Writes the token in a temp file an returns its path.
