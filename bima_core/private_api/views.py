@@ -12,6 +12,7 @@ from rest_framework.generics import ListAPIView as _ListAPIView, RetrieveAPIView
     CreateAPIView as _CreateAPIView, UpdateAPIView as _UpdateAPIView
 from rest_framework.mixins import CreateModelMixin, DestroyModelMixin, ListModelMixin
 from rest_framework.parsers import MultiPartParser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
@@ -502,6 +503,8 @@ class YoutubeChannelList(APIView):
     """
     API to list Youtube channels with photo and album info
     """
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, *args, **kwargs):
         photo_pk = kwargs['pk']
         try:
@@ -521,6 +524,8 @@ class YoutubeUpload(APIView):
     """
     API to upload video to Youtube in a background task
     """
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request, *args, **kwargs):
         photo_pk = kwargs['pk']
         if not Photo.objects.filter(pk=photo_pk).exists():
