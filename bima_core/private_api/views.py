@@ -20,6 +20,8 @@ from rest_framework_swagger.views import get_swagger_view
 
 from ..models import Album, DAMTaxonomy, Gallery, GalleryMembership, Group, Photo, PhotoChunked, AccessLog, \
     Copyright, UsageRight, PhotoAuthor, TaggedKeyword, TaggedName, PhotoType
+from ..vimeo.models import VimeoAccount
+from ..vimeo.tasks import upload_video_vimeo
 from ..youtube.models import YoutubeChannel
 from ..youtube.tasks import upload_video_youtube
 
@@ -33,7 +35,8 @@ from .serializers import GroupSerializer, UserSerializer, AlbumSerializer, Photo
     TaxonomyListSerializer, GallerySerializer, GalleryMembershipSerializer, AccessLogSerializer, \
     PhotoFlickrSerializer, PhotoChunkedSerializer, WhoAmISerializer, CopyrightSerializer, UsageRightSerializer, \
     PhotoAuthorSerializer, PhotoSearchSerializer, KeywordTagSerializer, NameTagSerializer, PhotoUpdateSerializer, \
-    BasePhotoSerializer, AuthTokenSerializer, PhotoTypeSerializer, TaxonomyLevelSerializer, YoutubeSerializer
+    BasePhotoSerializer, AuthTokenSerializer, PhotoTypeSerializer, TaxonomyLevelSerializer, YoutubeSerializer, \
+    VimeoSerializer
 
 schema_view = get_swagger_view(title=_i('BIMA Core: Private API'))
 
@@ -539,3 +542,48 @@ class YoutubeUpload(APIView):
 
         upload_video_youtube.delay(youtube_channel_pk, photo_pk)
         return Response({'success': 'Youtube upload task started.'})
+
+
+# Vimeo related views
+
+
+class VimeoAccountList(APIView):
+    """
+    API to list Vimeo accounts with photo and album info
+    """
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        photo_pk = kwargs['pk']
+        try:
+            photo = Photo.objects.filter(pk=photo_pk).only(
+                'id', 'title', 'album__id', 'album__title'
+            )[:1][0]
+        except IndexError:
+            content = {'detail': 'Photo not found'}
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
+
+        data = {'photo': photo, 'vimeo_accounts': VimeoAccount.objects.all()}
+        serializer = VimeoSerializer(data)
+        return Response(serializer.data)
+
+
+class VimeoUpload(APIView):
+    """
+    API to upload video to Vimeo in a background task
+    """
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        photo_pk = kwargs['pk']
+        if not Photo.objects.filter(pk=photo_pk).exists():
+            content = {'detail': 'Photo not found'}
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
+
+        vimeo_account_pk = kwargs['account_pk']
+        if not VimeoAccount.objects.filter(pk=vimeo_account_pk).exists():
+            content = {'detail': 'Youtube channel not found'}
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
+
+        upload_video_vimeo.delay(vimeo_account_pk, photo_pk)
+        return Response({'success': 'Vimeo upload task started.'})

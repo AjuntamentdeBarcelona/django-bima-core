@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'bima_core',
     'bima_core.private_api',
     'bima_core.youtube',
+    'bima_core.vimeo',
 
     'django_mptt_admin',
     'categories',

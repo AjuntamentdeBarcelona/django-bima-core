@@ -412,6 +412,7 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
 
     # video and audio info
     youtube_code = models.CharField(_('YouTube code'), max_length=100, blank=True)
+    vimeo_code = models.CharField(_('Vimeo code'), max_length=100, blank=True)
     soundcloud_code = models.CharField(_('SoundCloud code'), max_length=100, blank=True)
     video_thumbnail = models.ImageField(upload_to=video_thumbnail_path,
                                         max_length=200,

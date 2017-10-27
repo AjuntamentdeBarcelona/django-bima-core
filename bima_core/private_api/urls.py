@@ -7,7 +7,8 @@ from .routers import CreateDeleteRouter
 from .views import schema_view, ObtainAuthToken, GroupViewSet, UserViewSet, AlbumViewSet, PhotoViewSet, WhoAmI, \
     TaxonomyViewSet, GalleryViewSet, LinkerPhotoViewSet, LoggerViewSet, ImportPhotoFlickr, TaxonomyListViewSet, \
     UploadChunkedPhoto, LoggerListView, CopyrightViewSet, AuthorViewSet, RestrictionViewSet, PhotoSearchView, \
-    KeywordViewSet, NameViewSet, UpdatePhoto, PhotoTypeViewSet, TaxonomyLevelViewSet, YoutubeChannelList, YoutubeUpload
+    KeywordViewSet, NameViewSet, UpdatePhoto, PhotoTypeViewSet, TaxonomyLevelViewSet, YoutubeChannelList, \
+    YoutubeUpload, VimeoAccountList, VimeoUpload
 
 urlpatterns = [
     url(r'^docs/$', schema_view),
@@ -25,8 +26,12 @@ urlpatterns = [
     url(r'^photos/import/(?P<flickr>[\w\d]+)/album/(?P<pk>[\w\d]+)/(?P<author>[\w\d]+)/(?P<copyright>[\w\d]+)/$',
         ImportPhotoFlickr.as_view(), name='photo-import'),
     url(r'^photos/(?P<pk>[\d]+)/addition/$', UpdatePhoto.as_view(), name='photo-update-addition'),
+
     url(r'^photos/(?P<pk>[\d]+)/youtube/$', YoutubeChannelList.as_view(), name='photo-youtube-channels'),
     url(r'^photos/(?P<pk>[\d]+)/youtube/(?P<channel_pk>[\d]+)/$', YoutubeUpload.as_view(), name='photo-youtube-upload'),
+
+    url(r'^photos/(?P<pk>[\d]+)/vimeo/$', VimeoAccountList.as_view(), name='photo-vimeo-accounts'),
+    url(r'^photos/(?P<pk>[\d]+)/vimeo/(?P<account_pk>[\d]+)/$', VimeoUpload.as_view(), name='photo-vimeo-upload'),
 
     # Categories endpoints
     url(r'^categories/flat/$', TaxonomyListViewSet.as_view(), name='category-list'),
