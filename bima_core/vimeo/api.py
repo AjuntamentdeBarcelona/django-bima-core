@@ -12,7 +12,7 @@ def upload_video(vimeo_account, file_path, title, description='', tags=None):
     Upload video file to Vimeo.
     """
     try:
-        v = vimeo.VimeoClient(token=vimeo_account.ACCESS_TOKEN)
+        v = vimeo.VimeoClient(token=vimeo_account.access_token)
         video_uri = v.upload(file_path)
         video = v.patch(video_uri, data={
             'name': title,
