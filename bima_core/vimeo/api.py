@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import vimeo
 
 
@@ -17,8 +18,10 @@ def upload_video(vimeo_account, file_path, title, description='', tags=None):
         video = v.patch(video_uri, data={
             'name': title,
             'description': description,
-            'tags': tags or []  # TODO: tags format?
         })
+        if tags:
+            url = os.path.join(video_uri, 'tags', ', '.join(tags))
+            video = v.put(url)
     except Exception as e:
         raise VimeoAPIError('Error uploading video to Vimeo') from e
 
