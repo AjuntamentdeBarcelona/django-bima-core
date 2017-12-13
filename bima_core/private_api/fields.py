@@ -100,3 +100,20 @@ class MultipleNumberFilter(django_filters.Filter):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, lookup_expr='in', **kwargs)
+
+
+class MultipleNumberAndUnassignedFilter(MultipleNumberFilter):
+    """
+    Field to permit 'in' or 'or' lookup expressions.
+    """
+    unassigned_value = -1
+
+    def filter(self, qs, value):
+        if self.unassigned_value not in value:
+            return super().filter(qs, value)
+        qs_null = self.get_method(qs)(**{'%s__%s' % (self.name, 'isnull'): True})
+        value.remove(self.unassigned_value)
+        if value:
+            qs_filter = super().filter(qs, value)
+            return qs_filter | qs_null
+        return qs_null

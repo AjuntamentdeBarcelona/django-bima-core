@@ -12,7 +12,7 @@ from bima_core.models import Photo, Album, DAMTaxonomy, Gallery, Group, AccessLo
     PhotoAuthor, TaggedKeyword, TaggedName, PhotoType
 
 from .dsl import PhotoDSL
-from .fields import MultipleNumberFilter
+from .fields import MultipleNumberFilter, MultipleNumberAndUnassignedFilter
 
 
 class FilterMixin(object):
@@ -76,11 +76,11 @@ class AlbumFilter(FilterMixin, django_filters.FilterSet):
 
 
 class PhotoFilter(FilterMixin, django_filters.FilterSet):
-    gallery = MultipleNumberFilter(name='photo_galleries__gallery')
+    gallery = MultipleNumberAndUnassignedFilter(name='photo_galleries__gallery')
     album = MultipleNumberFilter()
-    categories = MultipleNumberFilter()
+    categories = MultipleNumberAndUnassignedFilter()
     if getattr(settings, 'PHOTO_TYPES_ENABLED', False):
-        photo_type = MultipleNumberFilter()
+        photo_type = MultipleNumberAndUnassignedFilter()
 
     class Meta:
         model = Photo
