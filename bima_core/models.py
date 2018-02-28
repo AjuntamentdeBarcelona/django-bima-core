@@ -444,6 +444,10 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
         return FileType.get_url_file_type(self.image_file) == FileType.photo
 
     @property
+    def is_file(self):
+        return FileType.get_url_file_type(self.image_file) == FileType.file
+
+    @property
     def file_type(self):
         return FileType.get_url_file_type(self.image_file).name
 
