@@ -17,12 +17,17 @@ VIDEO_EXTENSIONS = ('.mov', '.mpeg4', '.mp4', '.avi', '.wmv', '.mpegps', '.flv',
 AUDIO_EXTENSIONS = ('.aiff', '.wav', '.flac', '.alac', '.ogg', '.mp2', '.mp3', '.aac', '.amr', '.wma')
 
 
+# file extensions
+FILE_EXTENSIONS = ('.pdf', )
+
+
 @unique
 class FileType(Enum):
     unknown = 0
     photo = 1
     video = 2
     audio = 3
+    file = 4
 
     @classmethod
     def get_url_file_type(cls, url):
@@ -38,4 +43,6 @@ class FileType(Enum):
             return cls.video
         if extension in AUDIO_EXTENSIONS:
             return cls.audio
+        if extension in FILE_EXTENSIONS:
+            return cls.file
         return cls.unknown
