@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Q
+from django_filters import CharFilter
 from django_filters.compat import remote_queryset
 from haystack.query import SearchQuerySet
 
@@ -79,14 +80,19 @@ class PhotoFilter(FilterMixin, django_filters.FilterSet):
     gallery = MultipleNumberAndUnassignedFilter(name='photo_galleries__gallery')
     album = MultipleNumberFilter()
     categories = MultipleNumberAndUnassignedFilter()
+    s3_path = CharFilter(method='s3_path_filter')
     if getattr(settings, 'PHOTO_TYPES_ENABLED', False):
         photo_type = MultipleNumberAndUnassignedFilter()
 
     class Meta:
         model = Photo
-        fields = ('status', 'title', 'description', 'owner', 'album', 'gallery', 'categories', )
+        fields = ('status', 'title', 'description', 'owner', 'album', 'gallery', 'categories',
+                  'original_file_name', 'youtube_code', 'vimeo_code', 's3_path', )
         if getattr(settings, 'PHOTO_TYPES_ENABLED', False):
             fields += ('photo_type', )
+
+    def s3_path_filter(self, queryset, name, value):
+        return queryset.filter(image__icontains=value)
 
 
 class TaxonomyFilter(FilterMixin, django_filters.FilterSet):
