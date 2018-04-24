@@ -8,7 +8,7 @@ from .views import schema_view, ObtainAuthToken, GroupViewSet, UserViewSet, Albu
     TaxonomyViewSet, GalleryViewSet, LinkerPhotoViewSet, LoggerViewSet, ImportPhotoFlickr, TaxonomyListViewSet, \
     UploadChunkedPhoto, LoggerListView, CopyrightViewSet, AuthorViewSet, RestrictionViewSet, PhotoSearchView, \
     KeywordViewSet, NameViewSet, UpdatePhoto, PhotoTypeViewSet, TaxonomyLevelViewSet, YoutubeChannelList, \
-    YoutubeUpload, VimeoAccountList, VimeoUpload
+    YoutubeUpload, VimeoAccountList, VimeoUpload, GalleryListViewSet
 
 urlpatterns = [
     url(r'^docs/$', schema_view),
@@ -33,8 +33,9 @@ urlpatterns = [
     url(r'^photos/(?P<pk>[\d]+)/vimeo/$', VimeoAccountList.as_view(), name='photo-vimeo-accounts'),
     url(r'^photos/(?P<pk>[\d]+)/vimeo/(?P<account_pk>[\d]+)/$', VimeoUpload.as_view(), name='photo-vimeo-upload'),
 
-    # Categories endpoints
+    # Categories and galleries flat endpoints
     url(r'^categories/flat/$', TaxonomyListViewSet.as_view(), name='category-list'),
+    url(r'^galleries/flat/$', GalleryListViewSet.as_view(), name='gallery-list'),
 
     # Loggers endpoints
     url(r'^exports/logger/$', LoggerListView.as_view(), name='export-logger'),
