@@ -676,6 +676,7 @@ class GallerySerializer(ThumborSerializerMixin, TranslationSerializerMixin, seri
     extra_info = serializers.SerializerMethodField()
     permissions = PermissionField()
     image_file_type = serializers.SerializerMethodField()
+    photos = serializers.SerializerMethodField()
 
     class Meta:
         model = Gallery
@@ -701,12 +702,28 @@ class GallerySerializer(ThumborSerializerMixin, TranslationSerializerMixin, seri
         photo = obj.photo
         return photo and photo.file_type
 
+    def get_photos(self, obj):
+        """
+        Returns no repeated ids
+        """
+        return obj.photos.all().distinct().values_list('id', flat=True)
+
     def validate_cover(self, value):
         if not self.instance.galleries_membership.filter(photo_id=value.id).exists():
             raise ValidationError(
                 _('Invalid pk "{pk}" - photo does not exist into current gallery.'.format(pk=value.id)), code='cover'
             )
         return value
+
+
+class GalleryListSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+    """
+    Gallery list serializer.
+    """
+
+    class Meta:
+        model = Gallery
+        fields = ('id', 'title', 'description', )
 
 
 class GalleryMembershipSerializer(ValidatePermissionSerializer, serializers.ModelSerializer):
