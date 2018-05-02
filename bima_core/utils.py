@@ -153,7 +153,7 @@ def get_exif_datetime(exif, key):
         if value and re.match(r'(\d+(:)*){3}\s(\d+:*){3}', value):
             value = value.replace(':', '-', 2)
         return parser.parse(value)
-    except (ValueError, OverflowError, AttributeError):
+    except (ValueError, OverflowError, AttributeError, TypeError):
         return None
 
 
