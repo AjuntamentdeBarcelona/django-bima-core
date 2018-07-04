@@ -665,6 +665,16 @@ class AlbumSerializer(ThumborSerializerMixin, TranslationSerializerMixin, BaseAl
         return value
 
 
+class AlbumListSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+    """
+    Album list serializer.
+    """
+
+    class Meta:
+        model = Album
+        fields = ('id', 'title', 'description', )
+
+
 class GallerySerializer(ThumborSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
     """
     Gallery serializer.
