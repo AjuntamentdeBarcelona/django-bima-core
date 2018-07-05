@@ -574,7 +574,7 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
                 if exif_info:
                     metadata.update({
                         'exif_date': get_exif_datetime(exif_info, 'EXIF DateTimeOriginal'),
-                        'camera_model': get_exif_info(exif_info, 'Image Model', default=''),
+                        'camera_model': get_exif_info(exif_info, 'Image Model', default='')[:50],
                         'orientation': get_exif_info(exif_info, 'Image Orientation'),
                         'longitude': get_exif_longitude(exif_info, 'GPS GPSLongitude'),
                         'latitude': get_exif_latitude(exif_info, 'GPS GPSLatitude'),
