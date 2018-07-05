@@ -36,7 +36,7 @@ from .serializers import GroupSerializer, UserSerializer, AlbumSerializer, Photo
     PhotoFlickrSerializer, PhotoChunkedSerializer, WhoAmISerializer, CopyrightSerializer, UsageRightSerializer, \
     PhotoAuthorSerializer, PhotoSearchSerializer, KeywordTagSerializer, NameTagSerializer, PhotoUpdateSerializer, \
     BasePhotoSerializer, AuthTokenSerializer, PhotoTypeSerializer, TaxonomyLevelSerializer, YoutubeSerializer, \
-    VimeoSerializer, GalleryListSerializer
+    VimeoSerializer, GalleryListSerializer, AlbumListSerializer
 
 schema_view = get_swagger_view(title=_i('BIMA Core: Private API'))
 
@@ -262,6 +262,16 @@ class AlbumViewSet(FilterModelViewSet):
     Update an album instance.
     """
     serializer_class = AlbumSerializer
+    queryset = Album.objects.active()
+    filter_class = AlbumFilter
+    filter_backends = (FilterAlbumPermissionBackend, )
+
+
+class AlbumListViewSet(FilterMixin, ListAPIView):
+    """
+    API to list albums
+    """
+    serializer_class = AlbumListSerializer
     queryset = Album.objects.active()
     filter_class = AlbumFilter
     filter_backends = (FilterAlbumPermissionBackend, )
