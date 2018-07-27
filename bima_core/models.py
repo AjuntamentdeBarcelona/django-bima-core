@@ -16,6 +16,7 @@ from django.contrib.auth.models import AbstractUser, Group as _Group
 from django_thumbor import generate_url
 from drf_chunked_upload.models import ChunkedUpload
 from exifread import process_file
+from geoposition import Geoposition
 from geoposition.fields import GeopositionField
 from hashfs import HashFS
 from taggit.managers import TaggableManager
@@ -606,6 +607,10 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
                 setattr(self, k, v)
             setattr(self.exif, k, v)
         self.exif.save()
+
+        # geoposition: latitude, longitude from exif
+        if self.latitude and self.longitude:
+            self.position = Geoposition(self.latitude, self.longitude)
 
         # commit changes
         if commit:
