@@ -6,7 +6,7 @@ from enum import Enum, unique
 
 
 # from bima-back
-IMAGE_EXTENSIONS = ('.gif', '.jpeg', '.jpg', '.png', '.tif', '.tiff', '.psd')
+IMAGE_EXTENSIONS = ('.gif', '.jpeg', '.jpg', '.png', '.tif', '.tiff', '.psd', '.ai', '.eps')
 
 
 # from https://support.google.com/youtube/troubleshooter/2888402?hl=en
