@@ -7,6 +7,8 @@ import subprocess
 from categories.models import CategoryBase
 from constance import config
 from django.conf import settings
+from django.contrib.gis.db.models import PointField
+from django.contrib.gis.geos import Point
 from django.db import models
 from django.core.files.base import File
 from django.utils.text import slugify
@@ -366,6 +368,7 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
 
     # Location
     position = GeopositionField(null=True, blank=True)
+    point = PointField(null=True, blank=True)
     province = models.CharField(max_length=100, verbose_name=_('Province'), blank=True, default='')
     municipality = models.CharField(max_length=100, verbose_name=_('Municipality'), blank=True, default='')
     district = models.CharField(max_length=200, blank=True, default='', verbose_name=_('District'))
@@ -663,6 +666,15 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
         verbose_name = _('Photo')
         verbose_name_plural = _('Photos')
         ordering = ('-modified_at', 'owner', )
+
+    def save(self, *args, **kwargs):
+        if self.position:
+            self.point = Point(
+                float(self.position.longitude),
+                float(self.position.latitude)
+            )
+        super().save(*args, **kwargs)
+
 
 
 class PhotoChunked(PhotoChunkPermissionMixin, ChunkedUpload):
