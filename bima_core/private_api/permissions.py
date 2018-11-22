@@ -62,7 +62,9 @@ class FilterPhotoPermissionBackend(PermissionFiltersBackend):
         # filter by owner
         if not (belongs_to_admin_group(request.user) or is_staff_or_superuser(request.user)):
             return queryset.filter(
-                Q(owner=request.user) | Q(album__owners=request.user) | Q(status=queryset.model.PUBLISHED)
+                Q(owner=request.user)
+                | Q(album__id__in=[a.id for a in request.user.albums.all()])
+                | Q(status=queryset.model.PUBLISHED)
             ).distinct()
         # admin user
         return queryset

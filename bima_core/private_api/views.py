@@ -309,7 +309,7 @@ class PhotoViewSet(ViewSetSerializerMixin, FilterModelViewSet):
         return super().get_queryset().select_related(
             'exif', 'author', 'copyright', 'internal_usage_restriction', 'external_usage_restriction', 'owner', 'album'
         ).prefetch_related(
-            'categories', 'tagged_items', 'names', 'owner__groups'
+            'categories', 'tagged_items', 'names', 'owner__groups', 'album__owners',
         )
 
 
