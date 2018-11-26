@@ -20,6 +20,9 @@ class PhotoIndex(TranslationMixin, indexes.ModelSearchIndex, indexes.Indexable):
     class Meta:
         model = Photo
 
+    def get_updated_field(self):
+        return "modified_at"
+
     def prepare_categories(self, obj):
         """
         Prepare multi-valued field with all category names

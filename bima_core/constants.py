@@ -39,3 +39,7 @@ CHAR_REGEX = r'[\w\d]'
 UUID_REGEX = r'{char}{{8}}-{char}{{4}}-{char}{{4}}-{char}{{4}}-{char}{{12}}'.format(**{'char': CHAR_REGEX})
 
 HAYSTACK_DEFAULT_OPERATORS = ('AND', 'OR', )
+
+CACHE_PERMISSIONS_USER_BELONGS_PREFIX_KEY = 'user_belongs'
+CACHE_PERMISSIONS_OWNER_ALBUM_PREFIX_KEY = 'owner_album'
+CACHE_PERMISSIONS_TIMEOUT = 60

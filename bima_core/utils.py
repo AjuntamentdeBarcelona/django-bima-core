@@ -2,6 +2,8 @@
 import re
 from LatLon23 import Latitude, Longitude
 from dateutil import parser
+from django.conf import settings
+from django.core.cache import cache
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpRequest, QueryDict
@@ -10,7 +12,7 @@ import os
 import six
 import unicodedata
 
-from .constants import ADMIN_GROUP_NAME
+from .constants import ADMIN_GROUP_NAME, CACHE_PERMISSIONS_USER_BELONGS_PREFIX_KEY, CACHE_PERMISSIONS_TIMEOUT
 
 
 def idpath(fs, root, id, extension=''):
@@ -178,16 +180,36 @@ def get_exif_altitude(exif, key):
     return get_exif_info(exif, key, default=0)
 
 
-def belongs_to_some_group(user, groups):
+def belongs_to_some_group(user, groups, has_cache=True):
     """
     Check if the user belongs to some group.
     :param user:
     :param groups:
+    :param has_cache:
     :return:
     """
     if not (user and isinstance(user, get_user_model()) and groups and is_iterable(groups)):
         return False
-    return user.groups.filter(name__in=groups).exists()
+
+    # if cache enabled, get cache
+    try:
+        if has_cache:
+            cache_key = "{}_{}_{}".format(CACHE_PERMISSIONS_USER_BELONGS_PREFIX_KEY, user.id, '_'.join(groups))
+            cache_value = cache.get(cache_key)
+            if cache_value is not None:
+                return cache_value
+    except Exception:
+        # if exception occurred, disable cache
+        has_cache = False
+
+    # get value from qs
+    value = user.groups.filter(name__in=groups).exists()
+
+    # if cache enabled, set cache
+    if has_cache:
+        cache.set(cache_key, value, getattr(settings, 'CACHE_PERMISSIONS_TIMEOUT', CACHE_PERMISSIONS_TIMEOUT))
+
+    return value
 
 
 def belongs_to_group(user, group):

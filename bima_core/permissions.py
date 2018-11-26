@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
+from django.core.cache import cache
 from dry_rest_permissions.generics import allow_staff_or_superuser
 
-from .constants import ADMIN_GROUP_NAME, EDITOR_GROUP_NAME, PHOTOGRAPHER_GROUP_NAME
+from .constants import ADMIN_GROUP_NAME, EDITOR_GROUP_NAME, PHOTOGRAPHER_GROUP_NAME, \
+    CACHE_PERMISSIONS_OWNER_ALBUM_PREFIX_KEY, CACHE_PERMISSIONS_TIMEOUT
 
 from .utils import belongs_to_admin_group, belongs_to_some_group, belongs_to_group, belongs_to_system, \
     is_staff_or_superuser
@@ -89,12 +92,38 @@ class PhotoPermissionMixin(object):
     Permission mixin for photo model access
     """
 
-    def _read_or_create_permission(self, user):
+    def _get_owners_ids(self, has_cache=True):
+        """
+        Get album owners ids
+        :param has_cache:
+        :return:
+        """
+        # if cache enabled, get cache
+        try:
+            if has_cache:
+                cache_key = "{}_{}".format(CACHE_PERMISSIONS_OWNER_ALBUM_PREFIX_KEY, self.owner.id)
+                cache_value = cache.get(cache_key)
+                if cache_value:
+                    return cache_value
+        except Exception:
+            # if exception occurred, disable cache
+            has_cache = False
+
+        # get value
         owners = [self.owner.id, ] + list(self.album.owners.values_list('id', flat=True))
+
+        # if cache enabled, set cache
+        if has_cache:
+            cache.set(cache_key, owners, getattr(settings, 'CACHE_PERMISSIONS_TIMEOUT', CACHE_PERMISSIONS_TIMEOUT))
+
+        return owners
+
+    def _read_or_create_permission(self, user):
+        owners = self._get_owners_ids()
         return belongs_to_admin_group(user) or getattr(user, 'id', -1) in owners
 
     def _editor_and_album_owner_permission(self, user):
-        owners = [self.owner.id, ] + list(self.album.owners.values_list('id', flat=True))
+        owners = self._get_owners_ids()
         return belongs_to_group(user, EDITOR_GROUP_NAME) and getattr(user, 'id', -1) in owners
 
     def _photographer_and_owner(self, user):
