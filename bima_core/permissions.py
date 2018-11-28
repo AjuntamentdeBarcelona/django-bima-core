@@ -101,7 +101,7 @@ class PhotoPermissionMixin(object):
         # if cache enabled, get cache
         try:
             if has_cache:
-                cache_key = "{}_{}".format(CACHE_PERMISSIONS_OWNER_ALBUM_PREFIX_KEY, self.owner.id)
+                cache_key = "{}_{}".format(CACHE_PERMISSIONS_OWNER_ALBUM_PREFIX_KEY, self.album.id)
                 cache_value = cache.get(cache_key)
                 if cache_value:
                     return cache_value
@@ -110,7 +110,7 @@ class PhotoPermissionMixin(object):
             has_cache = False
 
         # get value
-        owners = [self.owner.id, ] + list(self.album.owners.values_list('id', flat=True))
+        owners = list(self.album.owners.values_list('id', flat=True))
 
         # if cache enabled, set cache
         if has_cache:
@@ -119,11 +119,11 @@ class PhotoPermissionMixin(object):
         return owners
 
     def _read_or_create_permission(self, user):
-        owners = self._get_owners_ids()
+        owners = [self.owner.id, ] + self._get_owners_ids()
         return belongs_to_admin_group(user) or getattr(user, 'id', -1) in owners
 
     def _editor_and_album_owner_permission(self, user):
-        owners = self._get_owners_ids()
+        owners = [self.owner.id, ] + self._get_owners_ids()
         return belongs_to_group(user, EDITOR_GROUP_NAME) and getattr(user, 'id', -1) in owners
 
     def _photographer_and_owner(self, user):
