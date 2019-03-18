@@ -118,7 +118,7 @@ class GalleryFilter(FilterMixin, django_filters.FilterSet):
 
     class Meta:
         model = Gallery
-        fields = ('title', 'slug', 'owners', )
+        fields = ('title', 'slug', 'owners', 'status', )
 
 
 class AccessLogFilter(FilterMixin, django_filters.FilterSet):
