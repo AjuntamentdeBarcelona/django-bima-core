@@ -137,6 +137,8 @@ class Group(GroupPermissionMixin, _Group):
 
     class Meta:
         proxy = True
+        verbose_name = _('Group')
+        verbose_name_plural = _('Groups')
 
 
 class User(UserPermissionMixin, SoftDeleteModelMixin, AbstractUser):
@@ -151,6 +153,8 @@ class User(UserPermissionMixin, SoftDeleteModelMixin, AbstractUser):
 
     class Meta:
         ordering = ('is_active', 'username', 'date_joined', )
+        verbose_name = _('User')
+        verbose_name_plural = _('Users')
 
 
 class TaggedKeyword(GenericTaggedItemBase, ReadPermissionMixin):
@@ -315,6 +319,10 @@ class PhotoExif(models.Model):
             label = self.photo and self.photo.title
         label = label or self.pk
         return _i("{} exif".format(label))
+
+    class Meta:
+        verbose_name = _('PhotoExif')
+        verbose_name_plural = _('PhotoExifs')
 
 
 class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):

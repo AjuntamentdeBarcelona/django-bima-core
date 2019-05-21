@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-27 16:49+0200\n"
+"POT-Creation-Date: 2019-05-13 16:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,337 +18,375 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: admin.py:37
+#: bima_core/admin.py:37
 #, python-brace-format
 msgid "{verbose_name_plural} has not soft delete available."
-msgstr ""
+msgstr "{verbose_name_plural} no tiene borrado suave disponible"
 
-#: admin.py:53
+#: bima_core/admin.py:53
 #, python-brace-format
 msgid "Successfully soft deleted {count} {items}."
-msgstr ""
+msgstr "Borrado suave con éxito {count} {items}."
 
-#: admin.py:60
+#: bima_core/admin.py:60
 #, python-format
 msgid "Permanently delete selected %(verbose_name_plural)s"
-msgstr ""
+msgstr "Borrar permanentemente de los seleccionados %(verbose_name_plural)s"
 
-#: admin.py:61
+#: bima_core/admin.py:61
 #, python-format
 msgid "Soft delete selected %(verbose_name_plural)s"
-msgstr ""
+msgstr "Borrado suave de los seleccionados %(verbose_name_plural)s"
 
-#: models.py:64 models.py:197 models.py:403
+#: bima_core/models.py:73 bima_core/models.py:210 bima_core/models.py:437
 msgid "Creation date"
-msgstr ""
+msgstr "Fecha de creación"
 
-#: models.py:65 models.py:198 models.py:404
+#: bima_core/models.py:74 bima_core/models.py:211 bima_core/models.py:438
 msgid "Modification date"
-msgstr ""
+msgstr "Fecha de modificación"
 
-#: models.py:108 models.py:191 models.py:345
+#: bima_core/models.py:117 bima_core/models.py:204 bima_core/models.py:368
 msgid "Title"
-msgstr ""
+msgstr "Título"
 
-#: models.py:139 models.py:199 models.py:405
+#: bima_core/models.py:140
+msgid "Group"
+msgstr "Grupo"
+
+#: bima_core/models.py:141
+msgid "Groups"
+msgstr "Grupos"
+
+#: bima_core/models.py:150 bima_core/models.py:212 bima_core/models.py:439
 msgid "Delete date"
-msgstr ""
+msgstr "Fecha de borrado"
 
-#: models.py:175 models.py:237
-msgid "Name"
-msgstr ""
-
-#: models.py:181
-msgid "Photo Type"
-msgstr ""
-
-#: models.py:182
-msgid "Photo Types"
-msgstr ""
-
-#: models.py:192 models.py:253 models.py:348 models.py:597
-msgid "Description"
-msgstr ""
-
-#: models.py:194 models.py:600
-msgid "Cover"
-msgstr ""
-
-#: models.py:226 models.py:399
-msgid "Album"
-msgstr ""
-
-#: models.py:227
-msgid "Albums"
-msgstr ""
-
-#: models.py:243 models.py:380
-msgid "Copyright"
-msgstr ""
-
-#: models.py:244
-msgid "Copyrights"
-msgstr ""
-
-#: models.py:259
-msgid "Usage right"
-msgstr ""
-
-#: models.py:260
-msgid "Usage rights"
-msgstr ""
-
-#: models.py:270
-msgid "First name"
-msgstr ""
-
-#: models.py:271
-msgid "last name"
-msgstr ""
-
-#: models.py:283 models.py:378
-msgid "Author"
-msgstr ""
-
-#: models.py:284
-msgid "Authors"
-msgstr ""
-
-#: models.py:293 models.py:364
-msgid "Width"
-msgstr ""
-
-#: models.py:294 models.py:365
-msgid "Height"
-msgstr ""
-
-#: models.py:295
-msgid "Original date"
-msgstr ""
-
-#: models.py:296 models.py:368
-msgid "Camera model"
-msgstr ""
-
-#: models.py:297 models.py:369
-msgid "Orientation"
-msgstr ""
-
-#: models.py:298 models.py:370
-msgid "Exif longitude"
-msgstr ""
-
-#: models.py:299 models.py:371
-msgid "Exif latitude"
-msgstr ""
-
-#: models.py:300 models.py:372
-msgid "Exif altitude"
-msgstr ""
-
-#: models.py:301
-msgid "Exif size (bytes)"
-msgstr ""
-
-#: models.py:322 models.py:591
-msgid "Private"
-msgstr ""
-
-#: models.py:323 models.py:592
-msgid "Published"
-msgstr ""
-
-#: models.py:330
-msgid "Upload error"
-msgstr ""
-
-#: models.py:331
-msgid "Uploading"
-msgstr ""
-
-#: models.py:332
-msgid "Uploaded"
-msgstr ""
-
-#: models.py:343
-msgid "Identifier"
-msgstr ""
-
-#: models.py:344
-msgid "Image"
-msgstr ""
-
-#: models.py:346 models.py:598
-msgid "Status"
-msgstr ""
-
-#: models.py:347
-msgid "Upload status"
-msgstr ""
-
-#: models.py:349
-msgid "Original file name"
-msgstr ""
-
-#: models.py:350
-msgid "Internal comment"
-msgstr ""
-
-#: models.py:352
-msgid "Categorize date"
-msgstr ""
-
-#: models.py:356
-msgid "Province"
-msgstr ""
-
-#: models.py:357
-msgid "Municipality"
-msgstr ""
-
-#: models.py:358
-msgid "District"
-msgstr ""
-
-#: models.py:359
-msgid "Neighborhood"
-msgstr ""
-
-#: models.py:360
-msgid "Address"
-msgstr ""
-
-#: models.py:361
-msgid "Postcode"
-msgstr ""
-
-#: models.py:366
-msgid "Size (bytes)"
-msgstr ""
-
-#: models.py:367
-msgid "Exif date"
-msgstr ""
-
-#: models.py:375
-msgid "EXIF"
-msgstr ""
-
-#: models.py:383
-msgid "Internal usage restriction"
-msgstr ""
-
-#: models.py:386
-msgid "External usage restriction"
-msgstr ""
-
-#: models.py:390
-msgid "Flickr id"
-msgstr ""
-
-#: models.py:391
-msgid "Flickr username"
-msgstr ""
-
-#: models.py:392
-msgid "Owner"
-msgstr ""
-
-#: models.py:394
-msgid "Type"
-msgstr ""
-
-#: models.py:396
-msgid "Keywords"
-msgstr ""
-
-#: models.py:398
-msgid "Names"
-msgstr ""
-
-#: models.py:561 models.py:673
-msgid "Photo"
-msgstr ""
-
-#: models.py:562
-msgid "Photos"
-msgstr ""
-
-#: models.py:575
-msgid "Photo chunk"
-msgstr ""
-
-#: models.py:576
-msgid "Photo chunks"
-msgstr ""
-
-#: models.py:618
-msgid "Gallery"
-msgstr ""
-
-#: models.py:619
-msgid "Galleries"
-msgstr ""
-
-#: models.py:631 models.py:677
-msgid "Addition date"
-msgstr ""
-
-#: models.py:640
-msgid "code"
-msgstr ""
-
-#: models.py:641
-msgid "slug"
-msgstr ""
-
-#: models.py:650
-msgid "active"
-msgstr ""
-
-#: models.py:650
-msgid "inactive"
-msgstr ""
-
-#: models.py:654
-msgid "Taxonomy"
-msgstr ""
-
-#: models.py:655
-msgid "Taxonomies"
-msgstr ""
-
-#: models.py:669
-msgid "Viewed"
-msgstr ""
-
-#: models.py:670
-msgid "Downloaded"
-msgstr ""
-
-#: models.py:674
+#: bima_core/models.py:156 bima_core/models.py:846
 msgid "User"
-msgstr ""
+msgstr "Usuario"
 
-#: models.py:675
+#: bima_core/models.py:157
+msgid "Users"
+msgstr "Usuarios"
+
+#: bima_core/models.py:188 bima_core/models.py:250 bima_core/vimeo/models.py:8
+#: bima_core/youtube/models.py:43
+msgid "Name"
+msgstr "Nombre"
+
+#: bima_core/models.py:194
+msgid "Photo Type"
+msgstr "Tipo de foto"
+
+#: bima_core/models.py:195
+msgid "Photo Types"
+msgstr "Tipos de foto"
+
+#: bima_core/models.py:205 bima_core/models.py:266 bima_core/models.py:371
+#: bima_core/models.py:769
+msgid "Description"
+msgstr "Descripción"
+
+#: bima_core/models.py:207 bima_core/models.py:772
+msgid "Cover"
+msgstr "Cobertura"
+
+#: bima_core/models.py:239 bima_core/models.py:423
+msgid "Album"
+msgstr "Album"
+
+#: bima_core/models.py:240
+msgid "Albums"
+msgstr "Álbumes"
+
+#: bima_core/models.py:256 bima_core/models.py:404
+msgid "Copyright"
+msgstr "Copyright"
+
+#: bima_core/models.py:257
+msgid "Copyrights"
+msgstr "Copyrights"
+
+#: bima_core/models.py:272
+msgid "Usage right"
+msgstr "Uso correcto"
+
+#: bima_core/models.py:273
+msgid "Usage rights"
+msgstr "Usos correctos"
+
+#: bima_core/models.py:283
+msgid "First name"
+msgstr "Nombre"
+
+#: bima_core/models.py:284
+msgid "last name"
+msgstr "Apellidos"
+
+#: bima_core/models.py:296 bima_core/models.py:402
+msgid "Author"
+msgstr "Autor"
+
+#: bima_core/models.py:297
+msgid "Authors"
+msgstr "Autores"
+
+#: bima_core/models.py:306 bima_core/models.py:388
+msgid "Width"
+msgstr "Anchura"
+
+#: bima_core/models.py:307 bima_core/models.py:389
+msgid "Height"
+msgstr "Altura"
+
+#: bima_core/models.py:308
+msgid "Original date"
+msgstr "Fecha original"
+
+#: bima_core/models.py:309 bima_core/models.py:392
+msgid "Camera model"
+msgstr "Modelo de cámara"
+
+#: bima_core/models.py:310 bima_core/models.py:393
+msgid "Orientation"
+msgstr "Orientación"
+
+#: bima_core/models.py:311 bima_core/models.py:394
+msgid "Exif longitude"
+msgstr "Longitud"
+
+#: bima_core/models.py:312 bima_core/models.py:395
+msgid "Exif latitude"
+msgstr "Latitud"
+
+#: bima_core/models.py:313 bima_core/models.py:396
+msgid "Exif altitude"
+msgstr "Altitud"
+
+#: bima_core/models.py:314
+msgid "Exif size (bytes)"
+msgstr "Tamaño (bytes)"
+
+#: bima_core/models.py:324
+msgid "PhotoExif"
+msgstr "Formato de foto"
+
+#: bima_core/models.py:325
+msgid "PhotoExifs"
+msgstr "Formatos de foto"
+
+#: bima_core/models.py:339 bima_core/models.py:763
+msgid "Private"
+msgstr "Privado"
+
+#: bima_core/models.py:340 bima_core/models.py:764
+msgid "Published"
+msgstr "Publicado"
+
+#: bima_core/models.py:347
+msgid "Upload error"
+msgstr "Error de subida"
+
+#: bima_core/models.py:348
+msgid "Uploading"
+msgstr "Subiendo"
+
+#: bima_core/models.py:349
+msgid "Uploaded"
+msgstr "Subido"
+
+#: bima_core/models.py:366
+msgid "Identifier"
+msgstr "Identificador"
+
+#: bima_core/models.py:367
+msgid "Image"
+msgstr "Imagen"
+
+#: bima_core/models.py:369 bima_core/models.py:770
+msgid "Status"
+msgstr "Estado"
+
+#: bima_core/models.py:370
+msgid "Upload status"
+msgstr "Estado de subida"
+
+#: bima_core/models.py:372
+msgid "Original file name"
+msgstr "Nombre de archivo original"
+
+#: bima_core/models.py:373
+msgid "Internal comment"
+msgstr "Comentario interno"
+
+#: bima_core/models.py:375
+msgid "Categorize date"
+msgstr "Fecha de categorización"
+
+#: bima_core/models.py:380
+msgid "Province"
+msgstr "Provincia"
+
+#: bima_core/models.py:381
+msgid "Municipality"
+msgstr "Municipio"
+
+#: bima_core/models.py:382
+msgid "District"
+msgstr "Distrito"
+
+#: bima_core/models.py:383
+msgid "Neighborhood"
+msgstr "Barrio"
+
+#: bima_core/models.py:384
+msgid "Address"
+msgstr "Dirección"
+
+#: bima_core/models.py:385
+msgid "Postcode"
+msgstr "Código postal"
+
+#: bima_core/models.py:390
+msgid "Size (bytes)"
+msgstr "Tamaño (bytes)"
+
+#: bima_core/models.py:391
+msgid "Exif date"
+msgstr "Fecha"
+
+#: bima_core/models.py:399
+msgid "EXIF"
+msgstr "EXIF"
+
+#: bima_core/models.py:407
+msgid "Internal usage restriction"
+msgstr "Restricción de uso interno"
+
+#: bima_core/models.py:410
+msgid "External usage restriction"
+msgstr "Restricción de uso externo"
+
+#: bima_core/models.py:414
+msgid "Flickr id"
+msgstr "ID de Flickr"
+
+#: bima_core/models.py:415
+msgid "Flickr username"
+msgstr "Nombre de usuario de Flickr"
+
+#: bima_core/models.py:416
+msgid "Owner"
+msgstr "Propietario"
+
+#: bima_core/models.py:418
+msgid "Type"
+msgstr "Tipo"
+
+#: bima_core/models.py:420
+msgid "Keywords"
+msgstr "Palabras clave"
+
+#: bima_core/models.py:422
+msgid "Names"
+msgstr "Nombres"
+
+#: bima_core/models.py:426
+msgid "YouTube code"
+msgstr "Código de Youtube"
+
+#: bima_core/models.py:427
+msgid "Vimeo code"
+msgstr "Código de Vimeo"
+
+#: bima_core/models.py:428
+msgid "SoundCloud code"
+msgstr "Código de SoundCloud"
+
+#: bima_core/models.py:433
+msgid "Video thumbnail"
+msgstr "Miniatura de video"
+
+#: bima_core/models.py:674 bima_core/models.py:845
+msgid "Photo"
+msgstr "Foto"
+
+#: bima_core/models.py:675
+msgid "Photos"
+msgstr "Fotos"
+
+#: bima_core/models.py:697
+msgid "Photo chunk"
+msgstr "Fragmento de foto"
+
+#: bima_core/models.py:698
+msgid "Photo chunks"
+msgstr "Fragmentos de foto"
+
+#: bima_core/models.py:790
+msgid "Gallery"
+msgstr "Galería"
+
+#: bima_core/models.py:791
+msgid "Galleries"
+msgstr "Galerias"
+
+#: bima_core/models.py:803 bima_core/models.py:849
+msgid "Addition date"
+msgstr "Fecha de adición"
+
+#: bima_core/models.py:812
+msgid "code"
+msgstr "Código"
+
+#: bima_core/models.py:813
+msgid "slug"
+msgstr "Slug"
+
+#: bima_core/models.py:822
+msgid "active"
+msgstr "Activo"
+
+#: bima_core/models.py:822
+msgid "inactive"
+msgstr "Inactivo"
+
+#: bima_core/models.py:826
+msgid "Taxonomy"
+msgstr "Taxonomía"
+
+#: bima_core/models.py:827
+msgid "Taxonomies"
+msgstr "Taxonomias"
+
+#: bima_core/models.py:841
+msgid "Viewed"
+msgstr "Visto"
+
+#: bima_core/models.py:842
+msgid "Downloaded"
+msgstr "Descargado"
+
+#: bima_core/models.py:847
 msgid "Action"
-msgstr ""
+msgstr "Acción"
 
-#: models.py:680
+#: bima_core/models.py:852
 msgid "Access log"
-msgstr ""
+msgstr "Log de acceso"
 
-#: models.py:681
+#: bima_core/models.py:853
 msgid "Access logs"
-msgstr ""
+msgstr "Logs de acceso"
 
-#: templates/emails/singup/signup_reset_password_body.html:5
-#: templates/emails/singup/signup_reset_password_body.txt:5
+#: bima_core/templates/emails/singup/signup_reset_password_body.html:5
+#: bima_core/templates/emails/singup/signup_reset_password_body.txt:5
 msgid "Hello from"
-msgstr ""
+msgstr "Hola desde"
 
-#: templates/emails/singup/signup_reset_password_body.html:8
-#: templates/emails/singup/signup_reset_password_body.txt:7
+#: bima_core/templates/emails/singup/signup_reset_password_body.html:8
+#: bima_core/templates/emails/singup/signup_reset_password_body.txt:7
 #, python-format
 msgid ""
 "\n"
@@ -357,32 +395,110 @@ msgid ""
 "    address to connect their account.\n"
 "    "
 msgstr ""
+"\n"
+"   Estas recibiendo este correo electrónico porque el usuaro "
+"%(user_display)s en%(site_domain)s ha dado el tuyo como dirección de correo "
+"electrónico\n"
+"   para conectar su cuenta.\n"
+"   "
 
-#: templates/emails/singup/signup_reset_password_body.html:15
-#: templates/emails/singup/signup_reset_password_body.txt:13
+#: bima_core/templates/emails/singup/signup_reset_password_body.html:15
+#: bima_core/templates/emails/singup/signup_reset_password_body.txt:13
 msgid "Please go to the following page and choose a new password:"
-msgstr ""
+msgstr "Por favor vaya a la siguiente pagína y escoja su nueva contraseña:"
 
-#: templates/emails/singup/signup_reset_password_body.html:20
-#: templates/emails/singup/signup_reset_password_body.txt:17
+#: bima_core/templates/emails/singup/signup_reset_password_body.html:20
+#: bima_core/templates/emails/singup/signup_reset_password_body.txt:17
 msgid "Your username, in case you've forgotten:"
-msgstr ""
+msgstr "Su nombre de usuario, en caso de que lo haya olvidado:"
 
-#: templates/emails/singup/signup_reset_password_body.html:24
-#: templates/emails/singup/signup_reset_password_body.txt:20
+#: bima_core/templates/emails/singup/signup_reset_password_body.html:24
+#: bima_core/templates/emails/singup/signup_reset_password_body.txt:20
 msgid "Thanks for using our site!"
-msgstr ""
+msgstr "Gracias por usar nuestra página web!"
 
-#: templates/emails/singup/signup_reset_password_body.html:25
-#: templates/emails/singup/signup_reset_password_body.txt:21
+#: bima_core/templates/emails/singup/signup_reset_password_body.html:25
+#: bima_core/templates/emails/singup/signup_reset_password_body.txt:21
 #, python-format
 msgid "The %(site_name)s team"
-msgstr ""
+msgstr "El equipo de %(site_name)s"
 
-#: templates/emails/singup/signup_reset_password_subject.html:3
+#: bima_core/templates/emails/singup/signup_reset_password_subject.html:3
 msgid "Thank you for signing up in"
-msgstr ""
+msgstr "Gracias por darse de alta"
 
-#: templates/emails/singup/signup_reset_password_subject.html:5
+#: bima_core/templates/emails/singup/signup_reset_password_subject.html:5
 msgid "Password reset on"
+msgstr "Reseteo de contraseña activado"
+
+#: bima_core/vimeo/models.py:9 bima_core/youtube/models.py:16
+msgid "Username"
+msgstr "Usuario"
+
+#: bima_core/vimeo/models.py:10
+msgid "Example: userZZZ"
+msgstr "Ejemplo: userZZZ"
+
+#: bima_core/vimeo/models.py:11
+msgid "Client ID"
+msgstr "ID de cliente"
+
+#: bima_core/vimeo/models.py:12
+msgid "Client secrets"
+msgstr "Secretos de cliente"
+
+#: bima_core/vimeo/models.py:13
+msgid "Access token"
+msgstr "Token de acceso"
+
+#: bima_core/vimeo/models.py:14
+msgid "Token must have at least scopes \"public private create edit upload\"."
 msgstr ""
+"El token debe tener por lo menos un ámbito \"público privado crear editar "
+"subir\"."
+
+#: bima_core/vimeo/models.py:17
+msgid "Vimeo account"
+msgstr "Cuenta Vimeo"
+
+#: bima_core/youtube/models.py:17
+msgid "Example: user@company.com"
+msgstr "Ejemplo: user@company.com"
+
+#: bima_core/youtube/models.py:18
+msgid "Client secret"
+msgstr "Secreto de cliente"
+
+#: bima_core/youtube/models.py:19
+msgid "Content of client_secret.json for this Youtube account."
+msgstr "Contenido de client_secret.json para esta cuenta de Youtube."
+
+#: bima_core/youtube/models.py:22 bima_core/youtube/models.py:46
+msgid "Youtube account"
+msgstr "Cuenta de Youtube"
+
+#: bima_core/youtube/models.py:43
+msgid "Informative name for users."
+msgstr "Nombre informativo para los usuarios"
+
+#: bima_core/youtube/models.py:44
+msgid "Channel id"
+msgstr "ID de canal"
+
+#: bima_core/youtube/models.py:45
+msgid "Example: UCT0ndP9FPOea9dgPkqB74Pw"
+msgstr "Ejemplo: UCT0ndP9FPOea9dgPkqB74Pw"
+
+#: bima_core/youtube/models.py:47
+msgid "Token"
+msgstr "Token"
+
+#: bima_core/youtube/models.py:48
+msgid "Autorefresh JSON token from Google OAuth2, don't edit manually."
+msgstr ""
+"Autorefrescar JSON token desde Google OAuth2, no hay que editarlo "
+"manualmente."
+
+#: bima_core/youtube/models.py:51
+msgid "Youtube channel"
+msgstr "Canal de Youtube"

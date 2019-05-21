@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-27 16:49+0200\n"
+"POT-Creation-Date: 2019-05-13 16:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,44 +18,44 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: private_api/serializers.py:222
+#: bima_core/private_api/serializers.py:225
 msgid "User must belong to a group."
-msgstr ""
+msgstr "El usuario debe pertenecer a un grupo"
 
-#: private_api/serializers.py:346
+#: bima_core/private_api/serializers.py:349
 msgid "Not permitted create 'keyword' instances"
-msgstr ""
+msgstr "No esta permitido crear instancias de 'palabra clave'"
 
-#: private_api/serializers.py:375
+#: bima_core/private_api/serializers.py:378
 msgid "Not permitted create 'name' instances"
-msgstr ""
+msgstr "No esta permitido crear instancias de 'nombre'"
 
-#: private_api/serializers.py:651
+#: bima_core/private_api/serializers.py:663
 #, python-brace-format
 msgid "Invalid pk \"{pk}\" - photo does not exist into current album."
-msgstr ""
+msgstr "PK inválida \"{pk}\" - la foto no existe en el album actual."
 
-#: private_api/serializers.py:687
+#: bima_core/private_api/serializers.py:724
 #, python-brace-format
 msgid "Invalid pk \"{pk}\" - photo does not exist into current gallery."
-msgstr ""
+msgstr "PK inválida \"{pk}\" - la foto no existe en la galería actual."
 
-#: private_api/serializers.py:758
+#: bima_core/private_api/serializers.py:805
 msgid "A Category can not be its own parent."
-msgstr ""
+msgstr "Una categoría no puede ser su propio padre."
 
-#: private_api/serializers.py:997
+#: bima_core/private_api/serializers.py:1054
 msgid "Album '{}' does not exist"
-msgstr ""
+msgstr "Album '{}' no existe"
 
-#: private_api/serializers.py:1003
+#: bima_core/private_api/serializers.py:1060
 msgid "Photo '{}' does not exist"
-msgstr ""
+msgstr "Foto '{}' no existe"
 
-#: private_api/serializers.py:1009
+#: bima_core/private_api/serializers.py:1066
 msgid "Author '{}' does not exist"
-msgstr ""
+msgstr "Autor '{}' no existe"
 
-#: private_api/serializers.py:1015
+#: bima_core/private_api/serializers.py:1072
 msgid "Copyright '{}' does not exist"
-msgstr ""
+msgstr "Copyright '{}' no existe"
