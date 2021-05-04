@@ -641,8 +641,8 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
         thumb_name = os.path.basename(thumb_path)
 
         try:
-            command = ['ffmpeg', '-i', video_path, '-vf', 'thumbnail=100',
-                       '-frames:v', '1', '-hide_banner', '-y', thumb_path]
+            command = ['ffmpeg', '-i', video_path, '-an',
+                       '-ss', '1', '-t', '1', '-r', '1', '-y', thumb_path]
             proc = subprocess.run(command,
                                   stdout=subprocess.PIPE,
                                   stderr=subprocess.STDOUT,
