@@ -4,11 +4,12 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Q
-from django_filters import CharFilter
+from django_filters import CharFilter, Filter
 from django_filters.compat import remote_queryset
 from haystack.query import SearchQuerySet
 
 from bima_core.constants import HAYSTACK_DEFAULT_OPERATORS
+from bima_core.filetypes import IMAGE_EXTENSIONS, VIDEO_EXTENSIONS, AUDIO_EXTENSIONS, FILE_EXTENSIONS
 from bima_core.models import Photo, Album, DAMTaxonomy, Gallery, Group, AccessLog, Copyright, UsageRight, \
     PhotoAuthor, TaggedKeyword, TaggedName, PhotoType
 
@@ -91,18 +92,38 @@ class PhotoFilter(FilterMixin, django_filters.FilterSet):
     album = MultipleNumberFilter()
     categories = MultipleNumberAndUnassignedFilter()
     s3_path = CharFilter(method='s3_path_filter')
+    file_type = Filter(method='filter_file_type')
     if getattr(settings, 'PHOTO_TYPES_ENABLED', False):
         photo_type = MultipleNumberAndUnassignedFilter()
 
     class Meta:
         model = Photo
         fields = ('status', 'title', 'description', 'owner', 'album', 'gallery', 'categories',
-                  'original_file_name', 'youtube_code', 'vimeo_code', 's3_path', )
+                  'original_file_name', 'youtube_code', 'vimeo_code', 's3_path', 'file_type', )
         if getattr(settings, 'PHOTO_TYPES_ENABLED', False):
             fields += ('photo_type', )
 
     def s3_path_filter(self, queryset, name, value):
         return queryset.filter(image__icontains=value)
+
+    def filter_file_type(self, queryset, name, value):
+        file_types = self.form.data.getlist('file_type')
+        file_extensions = []
+        q = Q()
+        if 'image' in file_types:
+            file_extensions = file_extensions + list(IMAGE_EXTENSIONS)
+            file_extensions.remove('.eps')
+        if 'vector' in file_types:
+            file_extensions = file_extensions + ['.eps']
+        if 'video' in file_types:
+            file_extensions = file_extensions + list(VIDEO_EXTENSIONS)
+        if 'audio' in file_types:
+            file_extensions = file_extensions + list(AUDIO_EXTENSIONS)
+        if 'file' in file_types:
+            file_extensions = file_extensions + list(FILE_EXTENSIONS)
+        for file_extension in file_extensions:
+            q = q | Q(original_file_name__endswith=file_extension)
+        return queryset.filter(q)
 
 
 class TaxonomyFilter(FilterMixin, django_filters.FilterSet):
