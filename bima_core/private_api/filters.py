@@ -208,10 +208,11 @@ class PhotoTypeFilter(FilterMixin, django_filters.FilterSet):
 
 class PhotoSearchFilter(django_filters.FilterSet):
     q = django_filters.MethodFilter()
+    file_type = Filter(method='filter_file_type')
 
     class Meta:
         model = Photo
-        fields = ('q', )
+        fields = ('q', 'file_type', )
 
     def filter_q(self, queryset, value):
         """
@@ -261,3 +262,35 @@ class PhotoSearchFilter(django_filters.FilterSet):
         Get filter operation on SearchQuerySet with defined operator
         """
         return getattr(search, "filter_{}".format(operator.lower()))
+
+    def filter_file_type(self, queryset, name, value):
+        if not value:
+            return queryset
+        file_types = value.split(', ')
+        file_extensions = []
+        q = Q()
+
+        search = SearchQuerySet(query=queryset.query).models(*[self.Meta.model, ])
+
+        if 'image' in file_types:
+            file_extensions = file_extensions + list(IMAGE_EXTENSIONS)
+            file_extensions.remove('.eps')
+        if 'vector' in file_types:
+            file_extensions = file_extensions + ['.eps']
+        if 'video' in file_types:
+            file_extensions = file_extensions + list(VIDEO_EXTENSIONS)
+        if 'audio' in file_types:
+            file_extensions = file_extensions + list(AUDIO_EXTENSIONS)
+        if 'file' in file_types:
+            file_extensions = file_extensions + list(FILE_EXTENSIONS)
+
+        first = True
+        for file_extension in file_extensions:
+            if first:
+                q = Q(original_file_name__endswith=str(file_extension))
+                first = False
+            q |= Q(original_file_name__endswith=str(file_extension))
+
+        search = search.filter_and(q)
+
+        return search
