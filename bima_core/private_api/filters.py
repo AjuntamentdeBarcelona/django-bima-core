@@ -89,6 +89,7 @@ class AlbumFilter(FilterMixin, django_filters.FilterSet):
 
 class PhotoFilter(FilterMixin, django_filters.FilterSet):
     gallery = MultipleNumberAndUnassignedFilter(name='photo_galleries__gallery')
+    keywords_tags = CharFilter(method='keywords_filter')
     album = MultipleNumberFilter()
     categories = MultipleNumberAndUnassignedFilter()
     s3_path = CharFilter(method='s3_path_filter')
@@ -98,7 +99,7 @@ class PhotoFilter(FilterMixin, django_filters.FilterSet):
 
     class Meta:
         model = Photo
-        fields = ('status', 'title', 'description', 'owner', 'album', 'gallery', 'categories',
+        fields = ('status', 'title', 'description', 'owner', 'album', 'gallery', 'keywords_tags', 'categories',
                   'original_file_name', 'youtube_code', 'vimeo_code', 's3_path', 'file_type', )
         if getattr(settings, 'PHOTO_TYPES_ENABLED', False):
             fields += ('photo_type', )
@@ -124,6 +125,13 @@ class PhotoFilter(FilterMixin, django_filters.FilterSet):
         for file_extension in file_extensions:
             q = q | Q(original_file_name__endswith=file_extension)
         return queryset.filter(q)
+
+    def keywords_filter(self, queryset, name, value):
+        keywords_list = []
+        list = value.split(',')
+        for list_value in list:
+            keywords_list.append(list_value.strip())
+        return queryset.filter(keywords__name__in=keywords_list)
 
 
 class TaxonomyFilter(FilterMixin, django_filters.FilterSet):
