@@ -127,11 +127,12 @@ class PhotoFilter(FilterMixin, django_filters.FilterSet):
         return queryset.filter(q)
 
     def keywords_filter(self, queryset, name, value):
-        keywords_list = []
         list = value.split(',')
+        q = Q()
         for list_value in list:
-            keywords_list.append(list_value.strip())
-        return queryset.filter(keywords__name__in=keywords_list)
+            if list_value:
+                q = q | Q(keywords__name__iexact=list_value.strip())
+        return queryset.filter(q).distinct()
 
 
 class TaxonomyFilter(FilterMixin, django_filters.FilterSet):
