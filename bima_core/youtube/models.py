@@ -43,7 +43,7 @@ class YoutubeChannel(ReadPermissionMixin, models.Model):
     name = models.CharField(_('Name'), max_length=100, help_text=_('Informative name for users.'))
     channel_id = models.CharField(_('Channel id'), max_length=100, unique=True, help_text=_(
         'Example: UCT0ndP9FPOea9dgPkqB74Pw'))
-    account = models.ForeignKey(YoutubeAccount, verbose_name=_('Youtube account'))
+    account = models.ForeignKey(YoutubeAccount, verbose_name=_('Youtube account'), on_delete=models.RESTRICT)
     token = models.TextField(_('Token'), blank=True, help_text=_(
         "Autorefresh JSON token from Google OAuth2, don't edit manually."))
 

@@ -1,5 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
-
+from django_filters import rest_framework as filters
 
 class HaystackDjangoFilterBackend(DjangoFilterBackend):
 
