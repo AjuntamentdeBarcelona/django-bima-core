@@ -165,7 +165,7 @@ class TaggedKeyword(GenericTaggedItemBase, ReadPermissionMixin):
     """
 
     language = LanguageField(default=settings.LANGUAGE_CODE)
-    tag = models.ForeignKey(Tag, related_name="%(app_label)s_%(class)s_tags")
+    tag = models.ForeignKey(Tag, related_name="%(app_label)s_%(class)s_tags", on_delete=models.RESTRICT)
 
     class Meta:
         unique_together = ('object_id', 'tag', 'language', )
@@ -178,7 +178,7 @@ class TaggedName(GenericTaggedItemBase, ReadPermissionMixin):
     through the model this would not overwritten it.
     """
 
-    tag = models.ForeignKey(Tag, related_name="%(app_label)s_%(class)s_tags")
+    tag = models.ForeignKey(Tag, related_name="%(app_label)s_%(class)s_tags", on_delete=models.RESTRICT)
 
 
 class PhotoType(ReadPermissionMixin, models.Model):
@@ -204,7 +204,8 @@ class Album(AlbumPermissionMixin, SoftDeleteModelMixin, models.Model):
     title = models.CharField(max_length=128, verbose_name=_('Title'))
     description = models.TextField(verbose_name=_('Description'))
     slug = models.SlugField(unique=True)
-    cover = models.ForeignKey('Photo', blank=True, null=True, verbose_name=_('Cover'), related_name='covers_album')
+    cover = models.ForeignKey('Photo', blank=True, null=True, verbose_name=_('Cover'), related_name='covers_album',
+                              on_delete=models.RESTRICT)
 
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
@@ -396,31 +397,33 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
     altitude = models.FloatField(default=0, verbose_name=_('Exif altitude'))
 
     # Readable auto-loaded photo exif
-    exif = models.OneToOneField(PhotoExif, blank=True, null=True, verbose_name=_('EXIF'))
+    exif = models.OneToOneField(PhotoExif, blank=True, null=True, verbose_name=_('EXIF'), on_delete=models.RESTRICT)
 
     # copyrights
     author = models.ForeignKey(PhotoAuthor, blank=True, null=True, verbose_name=_('Author'),
-                               related_name='author_photos')
+                               related_name='author_photos', on_delete=models.RESTRICT)
     copyright = models.ForeignKey(Copyright, blank=True, null=True, verbose_name=_('Copyright'),
-                                  related_name='copyright_photos')
+                                  related_name='copyright_photos', on_delete=models.RESTRICT)
     internal_usage_restriction = models.ForeignKey(UsageRight, blank=True, null=True,
                                                    verbose_name=_('Internal usage restriction'),
-                                                   related_name='internal_usage_restriction_photos')
+                                                   related_name='internal_usage_restriction_photos',
+                                                   on_delete=models.RESTRICT)
     external_usage_restriction = models.ForeignKey(UsageRight, blank=True, null=True,
                                                    verbose_name=_('External usage restriction'),
-                                                   related_name='external_usage_restriction_photos')
+                                                   related_name='external_usage_restriction_photos',
+                                                   on_delete=models.RESTRICT)
 
     # extra info
     flickr_id = models.CharField(max_length=50, blank=True, default='', verbose_name=_('Flickr id'))
     flickr_username = models.CharField(max_length=50, blank=True, default='', verbose_name=_('Flickr username'))
-    owner = models.ForeignKey(User, verbose_name=_('Owner'), related_name='photos')
+    owner = models.ForeignKey(User, verbose_name=_('Owner'), related_name='photos', on_delete=models.RESTRICT)
     photo_type = models.ForeignKey(PhotoType, null=True, blank=True, on_delete=models.SET_NULL,
                                    verbose_name=_('Type'), related_name='photos_type')
     categories = models.ManyToManyField('DAMTaxonomy', blank=True, related_name='taxonomy_photos')
     keywords = TaggableManager(blank=True, through=TaggedKeyword, manager=KeywordManager, verbose_name=_('Keywords'),
                                related_name='keyword_photos')
     names = TaggableManager(blank=True, through=TaggedName, verbose_name=_('Names'), related_name='name_photos')
-    album = models.ForeignKey(Album, verbose_name=_('Album'), related_name='photos_album')
+    album = models.ForeignKey(Album, verbose_name=_('Album'), related_name='photos_album', on_delete=models.RESTRICT)
 
     # video and audio info
     youtube_code = models.CharField(_('YouTube code'), max_length=100, blank=True)
@@ -684,7 +687,6 @@ class Photo(PhotoPermissionMixin, SoftDeleteModelMixin, models.Model):
         super().save(*args, **kwargs)
 
 
-
 class PhotoChunked(PhotoChunkPermissionMixin, ChunkedUpload):
     """
     Model to upload chunk files.
@@ -769,7 +771,8 @@ class Gallery(GalleryPermissionMixin, AbstractTimestampModel):
     description = models.TextField(verbose_name=_('Description'), blank=True, default='')
     status = models.IntegerField(choices=STATUS_CHOICES, default=PRIVATE, verbose_name=_('Status'))
     photos = models.ManyToManyField(User, related_name='galleries', through='GalleryMembership')
-    cover = models.ForeignKey(Photo, blank=True, null=True, verbose_name=_('Cover'), related_name='covers_gallery')
+    cover = models.ForeignKey(Photo, blank=True, null=True, verbose_name=_('Cover'), related_name='covers_gallery',
+                              on_delete=models.RESTRICT)
 
     owners = models.ManyToManyField(User, related_name='user_galleries')
 
@@ -801,7 +804,7 @@ class GalleryMembership(GalleryMembershipPermissionMixin, models.Model):
     gallery = models.ForeignKey(Gallery, related_name='galleries_membership', on_delete=models.CASCADE)
 
     added_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Addition date'))
-    added_by = models.ForeignKey(User, related_name='user_albums')
+    added_by = models.ForeignKey(User, related_name='user_albums', on_delete=models.RESTRICT)
 
 
 class DAMTaxonomy(TaxonomyPermissionMixin, CategoryBase):

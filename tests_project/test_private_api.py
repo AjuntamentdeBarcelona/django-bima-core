@@ -4,7 +4,7 @@ from unittest import mock
 
 from django.conf import settings
 from django.core.files.base import ContentFile
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 import pytest
 
 from .conftest import CHUNK_SIZE, encode_multipart_data, update_multipart_headers, update_chunk_range_headers, \

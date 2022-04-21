@@ -111,7 +111,7 @@ class MultipleNumberAndUnassignedFilter(MultipleNumberFilter):
     def filter(self, qs, value):
         if self.unassigned_value not in value:
             return super().filter(qs, value)
-        qs_null = self.get_method(qs)(**{'%s__%s' % (self.name, 'isnull'): True})
+        qs_null = self.get_method(qs)(**{'%s__%s' % (self.field_name, 'isnull'): True})
         value.remove(self.unassigned_value)
         if value:
             qs_filter = super().filter(qs, value)

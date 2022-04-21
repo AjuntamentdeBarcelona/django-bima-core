@@ -7,7 +7,7 @@ from django.core.cache import cache
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpRequest, QueryDict
-from exifread import Ratio
+from exifread.utils import Ratio
 import os
 import six
 import unicodedata

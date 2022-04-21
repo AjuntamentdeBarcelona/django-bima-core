@@ -1,48 +1,49 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from django.conf.urls import url
+from django.urls import path, re_path
 from rest_framework.routers import SimpleRouter
 from bima_core.constants import UUID_REGEX
 from .routers import CreateDeleteRouter
-from .views import schema_view, ObtainAuthToken, GroupViewSet, UserViewSet, AlbumViewSet, PhotoViewSet, WhoAmI, \
+from .views import ObtainAuthToken, GroupViewSet, UserViewSet, AlbumViewSet, PhotoViewSet, WhoAmI, \
     TaxonomyViewSet, GalleryViewSet, LinkerPhotoViewSet, LoggerViewSet, ImportPhotoFlickr, TaxonomyListViewSet, \
     UploadChunkedPhoto, LoggerListView, CopyrightViewSet, AuthorViewSet, RestrictionViewSet, PhotoSearchView, \
     KeywordViewSet, NameViewSet, UpdatePhoto, PhotoTypeViewSet, TaxonomyLevelViewSet, YoutubeChannelList, \
-    YoutubeUpload, VimeoAccountList, VimeoUpload, GalleryListViewSet, AlbumListViewSet
+    YoutubeUpload, VimeoAccountList, VimeoUpload, GalleryListViewSet, AlbumListViewSet, SwaggerPrivateSchemaView
 
 urlpatterns = [
-    url(r'^docs/$', schema_view),
+    path('docs/', SwaggerPrivateSchemaView.as_view()),
 
     # Auth endpoint
-    url(r'^api-token-auth/', ObtainAuthToken.as_view()),
+    path('api-token-auth/', ObtainAuthToken.as_view()),
 
     # User endpoint
-    url(r'^whoami/$', WhoAmI.as_view(), name='whoami'),
+    path('whoami/', WhoAmI.as_view(), name='whoami'),
 
     # Photos endpoints
-    url(r'^photos/upload/$', UploadChunkedPhoto.as_view(), name='photo-upload'),
-    url(r'^photos/upload/(?P<pk>{})/chunk/$'.format(UUID_REGEX), UploadChunkedPhoto.as_view(),
-        name='photo-upload-chunk'),
-    url(r'^photos/import/(?P<flickr>[\w\d]+)/album/(?P<pk>[\w\d]+)/(?P<author>[\w\d]+)/(?P<copyright>[\w\d]+)/$',
-        ImportPhotoFlickr.as_view(), name='photo-import'),
-    url(r'^photos/(?P<pk>[\d]+)/addition/$', UpdatePhoto.as_view(), name='photo-update-addition'),
+    path('photos/upload/', UploadChunkedPhoto.as_view(), name='photo-upload'),
+    re_path(r'photos/upload/(?P<pk>{})/chunk/$'.format(UUID_REGEX), UploadChunkedPhoto.as_view(),
+            name='photo-upload-chunk'),
+    re_path(r'photos/import/(?P<flickr>[\w\d]+)/album/<int:pk>/(?P<author>[\w\d]+)/(?P<copyright>[\w\d]+)/',
+            ImportPhotoFlickr.as_view(), name='photo-import'),
+    path('photos/<int:pk>/addition/', UpdatePhoto.as_view(), name='photo-update-addition'),
 
-    url(r'^photos/(?P<pk>[\d]+)/youtube/$', YoutubeChannelList.as_view(), name='photo-youtube-channels'),
-    url(r'^photos/(?P<pk>[\d]+)/youtube/(?P<channel_pk>[\d]+)/$', YoutubeUpload.as_view(), name='photo-youtube-upload'),
+    path('photos/<int:pk>/youtube/', YoutubeChannelList.as_view(), name='photo-youtube-channels'),
+    re_path(r'photos/<int:pk>/youtube/(?P<channel_pk>[\d]+)/$', YoutubeUpload.as_view(), name='photo-youtube-upload'),
 
-    url(r'^photos/(?P<pk>[\d]+)/vimeo/$', VimeoAccountList.as_view(), name='photo-vimeo-accounts'),
-    url(r'^photos/(?P<pk>[\d]+)/vimeo/(?P<account_pk>[\d]+)/$', VimeoUpload.as_view(), name='photo-vimeo-upload'),
+    path('photos/<int:pk>/vimeo/', VimeoAccountList.as_view(), name='photo-vimeo-accounts'),
+    re_path(r'photos/<int:pk>/vimeo/(?P<account_pk>[\d]+)/$', VimeoUpload.as_view(), name='photo-vimeo-upload'),
 
     # Categories and galleries flat endpoints
-    url(r'^categories/flat/$', TaxonomyListViewSet.as_view(), name='category-list'),
-    url(r'^galleries/flat/$', GalleryListViewSet.as_view(), name='gallery-list'),
-    url(r'^albums/flat/$', AlbumListViewSet.as_view(), name='album-list'),
+    path('categories/flat/', TaxonomyListViewSet.as_view(), name='category-list'),
+    path('galleries/flat/', GalleryListViewSet.as_view(), name='gallery-list'),
+    path('albums/flat/', AlbumListViewSet.as_view(), name='album-list'),
 
     # Loggers endpoints
-    url(r'^exports/logger/$', LoggerListView.as_view(), name='export-logger'),
+    path('exports/logger/', LoggerListView.as_view(), name='export-logger'),
 
     # Semantic photo search
-    url(r'^search/$', PhotoSearchView.as_view(), name='search'),
+    path('search/', PhotoSearchView.as_view(), name='search'),
+
 ]
 
 simple_router = SimpleRouter()
@@ -70,7 +71,7 @@ if getattr(settings, 'PHOTO_TYPES_ENABLED', False):
 
 # Create & delete view set
 create_delete_router = CreateDeleteRouter()
-create_delete_router.register('link', LinkerPhotoViewSet, base_name='gallery')
+create_delete_router.register('link', LinkerPhotoViewSet, basename='gallery')
 
 urlpatterns += simple_router.urls
 urlpatterns += create_delete_router.urls

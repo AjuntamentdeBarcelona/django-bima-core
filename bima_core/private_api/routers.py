@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from rest_framework.routers import SimpleRouter, Route, DynamicListRoute, DynamicDetailRoute
+from rest_framework.routers import SimpleRouter, Route, DynamicRoute
 
 
 class CreateRouter(SimpleRouter):
@@ -12,12 +12,14 @@ class CreateRouter(SimpleRouter):
             url=r'^{prefix}{trailing_slash}$',
             mapping={'post': 'create'},
             name='{basename}-create',
+            detail=False,
             initkwargs={'suffix': 'Create'}
         ),
         # Dynamically generated list routes.
-        DynamicListRoute(
+        DynamicRoute(
             url=r'^{prefix}/{methodname}{trailing_slash}$',
             name='{basename}-{methodnamehyphen}',
+            detail=False,
             initkwargs={}
         ),
     ]
@@ -33,12 +35,14 @@ class CreateDeleteRouter(SimpleRouter):
             url=r'^{prefix}{trailing_slash}$',
             mapping={'post': 'create'},
             name='{basename}-link',
+            detail=False,
             initkwargs={'suffix': 'Create'}
         ),
         # Dynamically generated list routes.
-        DynamicListRoute(
+        DynamicRoute(
             url=r'^{prefix}/{methodname}{trailing_slash}$',
             name='{basename}-{methodnamehyphen}',
+            detail=False,
             initkwargs={}
         ),
         # Delete route
@@ -46,12 +50,14 @@ class CreateDeleteRouter(SimpleRouter):
             url=r'^{prefix}/{lookup}{trailing_slash}$',
             mapping={'delete': 'destroy'},
             name='{basename}-unlink',
+            detail=False,
             initkwargs={'suffix': 'Instance'}
         ),
         # Dynamically generated detail routes.
-        DynamicDetailRoute(
+        DynamicRoute(
             url=r'^{prefix}/{lookup}/{methodname}{trailing_slash}$',
             name='{basename}-{methodnamehyphen}',
+            detail=False,
             initkwargs={}
         ),
     ]
