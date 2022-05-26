@@ -81,6 +81,7 @@ class UserFilter(FilterMixin, FullNameFilterMixin, filters.FilterSet):
 
 
 class AlbumFilter(FilterMixin, filters.FilterSet):
+    title = filters.CharFilter(lookup_expr='icontains')
 
     class Meta:
         model = Album
@@ -88,6 +89,8 @@ class AlbumFilter(FilterMixin, filters.FilterSet):
 
 
 class PhotoFilter(FilterMixin, filters.FilterSet):
+    title = filters.CharFilter(lookup_expr='icontains')
+    description = filters.CharFilter(lookup_expr='icontains')
     gallery = MultipleNumberAndUnassignedFilter(field_name='photo_galleries__gallery')
     keywords_tags = filters.CharFilter(method='keywords_filter')
     album = MultipleNumberFilter()
@@ -151,10 +154,12 @@ class TaxonomyFilter(FilterMixin, django_filters.FilterSet):
         return queryset.filter(name__icontains=value)
 
 class GalleryFilter(FilterMixin, filters.FilterSet):
+    title = filters.CharFilter(lookup_expr='icontains')
 
     class Meta:
         model = Gallery
         fields = ('title', 'slug', 'owners', 'status', )
+
 
 
 class AccessLogFilter(FilterMixin, filters.FilterSet):
@@ -167,6 +172,7 @@ class AccessLogFilter(FilterMixin, filters.FilterSet):
 
 
 class CopyrightFilter(FilterMixin, filters.FilterSet):
+    name = filters.CharFilter(lookup_expr='icontains')
 
     class Meta:
         model = Copyright
@@ -174,6 +180,7 @@ class CopyrightFilter(FilterMixin, filters.FilterSet):
 
 
 class UsageRightFilter(FilterMixin, filters.FilterSet):
+    title = filters.CharFilter(lookup_expr='icontains')
 
     class Meta:
         model = UsageRight
@@ -212,6 +219,7 @@ class KeywordFilter(TagFilter):
 
 
 class PhotoTypeFilter(FilterMixin, filters.FilterSet):
+    name = filters.CharFilter(lookup_expr='icontains')
 
     class Meta:
         model = PhotoType
